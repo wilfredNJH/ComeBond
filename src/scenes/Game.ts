@@ -91,8 +91,8 @@ export default class Game extends Phaser.Scene
 			this.lizards.get(lizObj.x! + lizObj.width! * 0.5, lizObj.y! - lizObj.height! * 0.5, 'lizard')
 		})
 
-		  // Create bulletins
-		  this.bulletins = this.physics.add.staticGroup({
+		// Create bulletins
+		this.bulletins = this.physics.add.staticGroup({
             classType: Bulletin
         })
         const bulletinsLayer = map.getObjectLayer('Bulletins')
@@ -164,13 +164,14 @@ export default class Game extends Phaser.Scene
         console.log(`Player's points: ${points}`);
         // Update UI with the new points value, if any UI exists for points
     }
+
 	update(t: number, dt: number)
 	{
 		if (this.faune)
 		{
 			this.faune.update(this.cursors)
+			this.bulletinPopup.update(this.faune.x, this.faune.y)
 		}
-
 
 	}
 }

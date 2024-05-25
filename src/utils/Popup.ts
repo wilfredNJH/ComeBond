@@ -15,10 +15,10 @@ class Popup {
 
         const boxWidth = 500;
         const boxHeight = 400;
-        const boxX = scene.cameras.main.width / 2;
-        const boxY = scene.cameras.main.height / 2;
+        const boxX = scene.cameras.main.x;
+        const boxY = scene.cameras.main.x;
 
-        this.background = scene.add.rectangle(boxX, boxY, boxWidth, boxHeight, 0x000000, 1);
+        this.background = scene.add.rectangle(scene.cameras.main.x, scene.cameras.main.y, boxWidth, boxHeight, 0x000000, 1);
         this.background.setOrigin(0.5, 0.5);
 
         this.text = scene.add.text(0, -100, '', {
@@ -101,6 +101,14 @@ class Popup {
         this.scene.registry.events.emit('points-changed', this.points);
 
         this.hide();
+    }
+
+    update(playerPosX, playerPosY){
+        // if container visible 
+        if(this.container.visible){
+            this.container.x = playerPosX
+            this.container.y = playerPosY
+        }
     }
 }
 
