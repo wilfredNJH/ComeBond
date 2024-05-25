@@ -221,16 +221,16 @@ class Popup {
 
     update(playerPosX, playerPosY){
        // if container visible 
-	   if (this.container.visible) {
-		this.container.x = playerPosX;
-		this.container.y = playerPosY;
-	}
+        if (this.container.visible) {
+            this.container.x = playerPosX;
+            this.container.y = playerPosY;
+        }
 
-	// Update position of sign-up container
-	if (this.signUpContainer.visible) {
-		this.signUpContainer.x = playerPosX;
-		this.signUpContainer.y = playerPosY;
-	}
+        // Update position of sign-up container
+        if (this.signUpContainer.visible) {
+            this.signUpContainer.x = playerPosX;
+            this.signUpContainer.y = playerPosY;
+        }
     }
 }
 
