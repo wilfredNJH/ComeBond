@@ -13,6 +13,7 @@ export default class Server extends Phaser.Scene
     private mRoom!: any
     private otherPlayers: { [key: string]: Faune } = {};
     private gameScene!: Phaser.Scene
+    private playerFaune!: Faune
 
     private chatInput!: HTMLInputElement;
     private isChatting: boolean = false;
@@ -98,11 +99,11 @@ export default class Server extends Phaser.Scene
                     console.log("Received othermove message from session ID " + sessionId + " with position x: " + x + ", y: " + y);
                     
                     // update the corresponding player's position 
-                    this.otherPlayers[sessionId].setPosition(x, y)
+                    this.otherPlayers[sessionId].set_body_position(x, y)
 
-                    if(this.otherPlayers[sessionId]){
-                        this.otherPlayers[sessionId].alt_update(1) // TODO: change this
-                    }
+                    // if(this.otherPlayers[sessionId]){
+                    //     this.otherPlayers[sessionId].alt_update(1) // TODO: change this
+                    // }
                 }
             });
               
@@ -119,14 +120,11 @@ export default class Server extends Phaser.Scene
                 const currentPlayer = this.mRoom.state.players[this.mRoom.sessionId];
                 // TODO : need to fix this 
                 if (currentPlayer) {
-                    if (key === "ArrowUp") currentPlayer.y += -1;
-                    if (key === "ArrowDown") currentPlayer.y += 1;
-                    if (key === "ArrowLeft") currentPlayer.x += -1;
-                    if (key === "ArrowRight") currentPlayer.x += 1;
-                    
-                    let x = currentPlayer.x 
-                    let y = currentPlayer.y
-                    this.mRoom.send("move", { x, y });
+                    // TODO : fix this 
+                    let x = this.playerFaune.x
+                    let y = this.playerFaune.y
+                    console.log('x ', x , 'y ', y)
+                    this.mRoom.send("move", { x , y });
                 }
 
             });
@@ -135,9 +133,9 @@ export default class Server extends Phaser.Scene
         });
     }
 
-    passGameScene(pGameScene: any, mwallslayer: any){
+    passGameScene(pGameScene: any, pPlayerFaune: any){
         this.gameScene = pGameScene
-        this.wallslayer = mwallslayer;
+        this.playerFaune = pPlayerFaune
     }
 
     addPlayer(sessionId: string, posX: number, posY: number) {

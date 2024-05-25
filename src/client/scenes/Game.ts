@@ -27,8 +27,8 @@ export default class Game extends Phaser.Scene
     public messageBoxTest: { [key: string]: Phaser.GameObjects.Container } = {};
 	public server!: Server;
 
-  private playerName!: string
-  private selectedSpriteIndex!: number
+	private playerName!: string
+	private selectedSpriteIndex!: number
 
 	constructor()
 	{
@@ -55,7 +55,6 @@ export default class Game extends Phaser.Scene
 		this.server.join() 
 		this.messageBoxTest = this.server.messageBox;
 
-		this.server.passGameScene(this)
 
 		this.scene.run('game-ui')
 
@@ -86,6 +85,7 @@ export default class Game extends Phaser.Scene
       }
 		this.faune.setKnives(this.knives)
 
+		this.server.passGameScene(this, this.faune)
 
 		const chests = this.physics.add.staticGroup({
 			classType: Chest

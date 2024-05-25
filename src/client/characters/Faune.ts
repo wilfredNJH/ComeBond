@@ -166,6 +166,13 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 		}
 	}
 
+	set_body_position(posX, posY){
+		console.log('body pos', posX)
+		this.setPosition(posX, posY)
+		this.body.x = posX
+		this.body.y = posY
+	}
+
 	alt_update(movementCode){
 		if (this.healthState === HealthState.DAMAGE
 			|| this.healthState === HealthState.DEAD
