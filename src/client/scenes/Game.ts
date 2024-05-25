@@ -52,22 +52,24 @@ export default class Game extends Phaser.Scene
 		/***************
 		 * SERVER START 
 		***************/
-		const { server } = data 
-		this.server = server;
-		server.join() 
-		this.messageBoxTest = server.messageBox;
-		server.passGameScene(this)
+		this.server.join() 
+		this.messageBoxTest = this.server.messageBox;
 
-		this.server.passGameScene(this)
+
+		const map = this.make.tilemap({ key: 'dungeon' })
+		const tileset = map.addTilesetImage('dungeon', 'tiles', 16, 16, 1, 2)
+
+		const wallsLayer = map.createStaticLayer('Walls', tileset)
+
+		wallsLayer.setCollisionByProperty({ collides: true })
+
+		this.server.passGameScene(this,wallsLayer)
 
 		this.scene.run('game-ui')
 
 		createCharacterAnims(this.anims)
 		createLizardAnims(this.anims)
 		createChestAnims(this.anims)
-
-		const map = this.make.tilemap({ key: 'dungeon' })
-		const tileset = map.addTilesetImage('dungeon', 'tiles', 16, 16, 1, 2)
 
 		map.createStaticLayer('Ground', tileset)
 
@@ -87,9 +89,7 @@ export default class Game extends Phaser.Scene
       }
 		this.faune.setKnives(this.knives)
 
-		const wallsLayer = map.createStaticLayer('Walls', tileset)
 
-		wallsLayer.setCollisionByProperty({ collides: true })
 
 		const chests = this.physics.add.staticGroup({
 			classType: Chest
