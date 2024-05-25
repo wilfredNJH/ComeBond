@@ -27,8 +27,11 @@ export default class Game extends Phaser.Scene
     public messageBoxTest: { [key: string]: Phaser.GameObjects.Container } = {};
 	public server!: Server;
 
-	private playerName!: string
-	private selectedSpriteIndex!: number
+  private playerName!: string
+  private selectedSpriteIndex!: number
+  private server!: Server
+  private backgroundMusic?: Phaser.Sound.BaseSound
+
 
 	constructor()
 	{
@@ -56,6 +59,11 @@ export default class Game extends Phaser.Scene
 		this.messageBoxTest = this.server.messageBox;
 
 
+    // Add the background music to the scene
+    this.backgroundMusic = this.sound.add('backgroundMusic', { loop: true })
+
+    // Start playing the background music
+    this.backgroundMusic.play()
 		this.scene.run('game-ui')
 
 		createCharacterAnims(this.anims)

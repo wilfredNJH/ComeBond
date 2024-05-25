@@ -25,6 +25,10 @@ export default class Preloader extends Phaser.Scene
 		this.load.image('ui-heart-full', 'ui/ui_heart_full.png')
 
 		this.load.image('knife', 'weapons/weapon_knife.png')
+
+
+		// Load your music file here
+		this.load.audio('backgroundMusic', 'sounds/background-music.mp3')
 	}
 
 	create()
