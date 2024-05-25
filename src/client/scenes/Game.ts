@@ -246,6 +246,7 @@ export default class Game extends Phaser.Scene
 		}
         // Update popup position based on player's position
         this.bulletinPopup.update(this.entity.x, this.entity.y);
+		this.shop.update(this.entity.x, this.entity.y);
 		
 
 	}

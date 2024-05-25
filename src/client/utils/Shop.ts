@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { sceneEvents } from '../events/EventsCenter'
 import Entity from '../characters/Entity'; // Adjust import path as needed
 
 class Shop {
@@ -40,7 +41,7 @@ class Shop {
         this.background = scene.add.rectangle(boxX, boxY, boxWidth, boxHeight, 0x000000, 1);
         this.background.setOrigin(0.5, 0.5);
 
-        this.closeButton = scene.add.text(0, -180, 'Close', {
+        this.closeButton = scene.add.text(0, 180, 'Close', {
             fontSize: '18px',
             color: '#ff0000',
             backgroundColor: '#000000',
@@ -140,11 +141,11 @@ class Shop {
                 this.entity._coins -= item.price;
                 //console.log(`${this.entity.playerName} bought ${item.name} for $${item.price}. Remaining coins: ${this.entity._coins}`);
                 // Display confirmation message
-                this.scene.add.text(this.scene.cameras.main.centerX, this.scene.cameras.main.centerY, `Purchased ${item.name}!`, { fontSize: '24px', color: '#00ff00' }).setOrigin(0.5);
+                sceneEvents.emit('success-notification', `Purchased ${item.name}!`)
             } else {
                 //console.log(`${this.entity.playerName} does not have enough coins to buy ${item.name}.`);
                 // Display insufficient funds message if needed
-                this.scene.add.text(this.scene.cameras.main.centerX, this.scene.cameras.main.centerY, `Not enough coins!`, { fontSize: '24px', color: '#ff0000' }).setOrigin(0.5);
+                sceneEvents.emit('failure-notification', `Not enough coins!`)
             }
         }
 
@@ -163,6 +164,11 @@ class Shop {
         if (this.container.visible) {
             this.container.x = playerPosX;
             this.container.y = playerPosY;
+        }
+
+        if (this.confirmContainer.visible){
+            this.confirmContainer.x = playerPosX;
+            this.confirmContainer.y = playerPosY;
         }
     }
 }
