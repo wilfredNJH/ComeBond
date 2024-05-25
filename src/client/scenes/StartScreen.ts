@@ -16,6 +16,13 @@ export default class StartScreen extends Phaser.Scene {
     }
 
     create() {
+
+        // Add the background image
+        const background = this.add.image(-17, 0, 'city-bg')
+        background.setOrigin(0, 0)
+        background.setDisplaySize(this.scale.width, this.scale.height) // Scale the background to fit the game size
+        background.setScale(0.5,0.5)
+
         // Display instructions and input for player name
         this.add.text(100, 100, 'Enter Your Name:', { fontFamily: 'Arial', fontSize: '24px', color: '#ffffff' })
 
@@ -23,8 +30,8 @@ export default class StartScreen extends Phaser.Scene {
 
         // Display sprite selection buttons using frames from atlases
         this.spriteSelection = [
-            this.add.image(200, 300, 'entity', 'walk-down-1.png').setInteractive(),
-            this.add.image(400, 300, 'lizard', 'idle-1.png').setInteractive()
+            this.add.image(200, 300, 'entity', 'walk-down-1.png').setInteractive().setDisplaySize(100, 100),
+            this.add.image(550, 300, 'lizard', 'idle-1.png').setInteractive().setDisplaySize(70, 125)
         ]
 
         // Set up click/tap handlers for sprite selection

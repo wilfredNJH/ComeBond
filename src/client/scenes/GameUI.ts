@@ -23,7 +23,7 @@ export default class GameUI extends Phaser.Scene
 		})
 
 		this.successLabel = this.add.text(220, 500, '0', {
-			fontSize: '40px',
+			fontSize: '30px',
 			color: '#00ff00'
 		})
 

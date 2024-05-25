@@ -64,6 +64,7 @@ export default class Game extends Phaser.Scene
 
     async create()
     {
+
 		/***************
 		 * SERVER START 
 		***************/
