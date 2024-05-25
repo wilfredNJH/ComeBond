@@ -15,7 +15,12 @@ class Popup {
     private signUpText: Phaser.GameObjects.Text;
     private signUpCloseButton: Phaser.GameObjects.Text;
     private signUpConfirmButton: Phaser.GameObjects.Text;
-
+    private signUpForm: Phaser.GameObjects.Container;
+    private nameInput: Phaser.GameObjects.DOMElement;
+    private emailInput: Phaser.GameObjects.DOMElement;
+    private phoneInput: Phaser.GameObjects.DOMElement;
+    private signUpConfirmBtn: Phaser.GameObjects.Text;
+    private signUpSuccessText: Phaser.GameObjects.Text;
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
 
@@ -82,7 +87,34 @@ class Popup {
         this.signUpContainer = scene.add.container(boxX, boxY, [this.signUpBackground, this.signUpText, this.signUpConfirmButton, this.signUpCloseButton]);
         this.signUpContainer.setVisible(false);
         this.signUpContainer.setDepth(1001); // Ensure it's in front of other objects
-    }
+ // Create sign-up form elements
+ this.signUpForm = scene.add.container(0, 0);
+ this.nameInput = scene.add.dom(boxX - 60, boxY - 30).createFromHTML(`<input type="text" placeholder="Name" style="width: 200px;">`);
+ this.emailInput = scene.add.dom(boxX - 60, boxY + 0).createFromHTML(`<input type="email" placeholder="Email" style="width: 200px;">`);
+ this.phoneInput = scene.add.dom(boxX - 60, boxY + 30).createFromHTML(`<input type="text" placeholder="Phone" style="width: 200px;">`);
+ this.signUpConfirmBtn = scene.add.text(boxX, boxY + 60, 'Confirm Sign-Up', {
+	 fontSize: '16px',
+	 color: '#00ff00',
+	 backgroundColor: '#000000',
+	 padding: { left: 10, right: 10, top: 5, bottom: 5 }
+ })
+	 .setOrigin(0.5)
+	 .setInteractive()
+	 .on('pointerdown', () => {
+		 this.confirmSignUp();
+	 });
+ this.signUpSuccessText = scene.add.text(boxX, boxY + 100, '', {
+	 fontSize: '14px',
+	 color: '#00ff00',
+	 align: 'center',
+	 wordWrap: { width: 280, useAdvancedWrap: true }
+ })
+	 .setOrigin(0.5);
+
+ this.signUpForm.add([this.nameInput, this.emailInput, this.phoneInput, this.signUpConfirmBtn, this.signUpSuccessText]);
+ this.signUpForm.setVisible(false);
+ this.signUpForm.setDepth(1002); // Ensure it's in front of other objects
+}
 
 
     showVolunteeringOpportunities() {
@@ -158,6 +190,33 @@ class Popup {
 
     hide() {
         this.container.setVisible(false);
+    }
+
+	private confirmSignUp() {
+        const name = (this.nameInput.getChildByName('input') as HTMLInputElement)?.value;
+        const email = (this.emailInput.getChildByName('input') as HTMLInputElement)?.value;
+        const phone = (this.phoneInput.getChildByName('input') as HTMLInputElement)?.value;
+
+        if (name && email && phone) {
+            // Perform signup logic here (e.g., send data to server, update UI, etc.)
+            this.signUpSuccessText.setText('Sign-up successful!');
+            this.resetSignUpForm();
+        } else {
+            this.signUpSuccessText.setText('Please fill out all fields.');
+        }
+    }
+
+    private resetSignUpForm() {
+        (this.nameInput.getChildByName('input') as HTMLInputElement).value = '';
+        (this.emailInput.getChildByName('input') as HTMLInputElement).value = '';
+        (this.phoneInput.getChildByName('input') as HTMLInputElement).value = '';
+        this.signUpForm.setVisible(false);
+        this.signUpSuccessText.setText('');
+        this.show(); // Show main popup after sign-up
+    }
+
+    show() {
+        this.container.setVisible(true);
     }
 
     update(playerPosX, playerPosY){
