@@ -154,9 +154,9 @@ export default class Game extends Phaser.Scene
 
 		this.physics.add.collider(this.knives, wallsLayer, this.handleKnifeWallCollision, undefined, this)
 		this.physics.add.collider(this.knives, this.lizards, this.handleKnifeLizardCollision, undefined, this)
-		this.physics.add.collider(this.entity, this.bulletins, this.handlePlayerBulletinCollision, undefined, this);
+		// this.physics.add.collider(this.entity, this.bulletins, this.handlePlayerBulletinCollision, undefined, this);
 
-		// this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.entity, this.handlePlayerLizardCollision, undefined, this)
+		this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.entity, this.handlePlayerLizardCollision, undefined, this)
   		this.bulletinPopup = new Popup(this);// Event listener for point changes
 		  this.registry.events.on('points-changed', (points) => {
 			  this.entity._coins += 50;
@@ -192,34 +192,14 @@ export default class Game extends Phaser.Scene
 
 	private handlePlayerLizardCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
 	{
-		const lizard = obj2 as Lizard
-		
-		const dx = this.entity.x - lizard.x
-		const dy = this.entity.y - lizard.y
-
-		const dir = new Phaser.Math.Vector2(dx, dy).normalize().scale(200)
-
-		this.entity.handleDamage(dir)
-
-		sceneEvents.emit('player-health-changed', this.entity.health)
-
-		if (this.entity.health <= 0)
-		{
-			this.playerLizardsCollider?.destroy()
-		}
+        const bulletin = obj2 as Bulletin
+		console.log('Player collided with bulletin'); // Debug statement
+    	this.bulletinPopup.showVolunteeringOpportunities();
 	}
 	private updateMessageBoxPosition(server:Server, playerID: string ) {
 			this.messageBoxTest[playerID].setPosition(this.entity.x, this.entity.y - this.entity.height - 20);
 		}
 	
-
-	private handlePlayerBulletinCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
-    {
-        const bulletin = obj2 as Bulletin
-		console.log('Player collided with bulletin'); // Debug statement
-    	this.bulletinPopup.showVolunteeringOpportunities();
-    }
-
 
 	private updateOtherMessageBoxPosition(server:Server, playerID: string ) {
 		if(this.messageBoxTest[playerID])
