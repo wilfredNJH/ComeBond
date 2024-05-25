@@ -255,8 +255,8 @@ export default class Server extends Phaser.Scene
                 //const currentPlayer = this.mRoom.state.players[this.mRoom.sessionId];
                 // TODO : need to fix this 
                // if (currentPlayer) {
-                let x = this.playerFaune.x 
-                let y = this.playerFaune.y
+                let x = this.playerentity.x 
+                let y = this.playerentity.y
                 console.log("stopmove " +x,y)
                 this.mRoom.send("stop_move",{x,y});
         
