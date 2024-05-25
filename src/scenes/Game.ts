@@ -29,6 +29,8 @@ export default class Game extends Phaser.Scene
 	private bulletinPopup!: Popup; // Add a property for the Popup
 	private bulletins!: Phaser.Physics.Arcade.StaticGroup
 
+    private playerPoints: number = 0;
+
 	constructor()
 	{
 		super('game')
@@ -110,10 +112,8 @@ export default class Game extends Phaser.Scene
 		this.physics.add.collider(this.faune, this.bulletins, this.handlePlayerBulletinCollision, undefined, this);
 
 		this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.faune, this.handlePlayerLizardCollision, undefined, this)
-		this.bulletinPopup = new Popup(this);
-      
-        // Listen for points change event
-        this.registry.events.on('points-changed', this.updatePoints, this);
+  		this.bulletinPopup = new Popup(this);
+        this.events.on('volunteer-signup', this.handleVolunteerSignup, this);
 
 		
 	}
@@ -160,9 +160,17 @@ export default class Game extends Phaser.Scene
 		console.log('Player collided with bulletin'); // Debug statement
     	this.bulletinPopup.showVolunteeringOpportunities();
     }
-	private updatePoints(points: number) {
-        console.log(`Player's points: ${points}`);
-        // Update UI with the new points value, if any UI exists for points
+
+	private handleVolunteerSignup(item: { date: string; event: string }) {
+        console.log(`Signed up for ${item.event} on ${item.date}`);
+        this.playerPoints += 100; // Example: Earn 100 points for signing up
+        console.log(`Player points: ${this.playerPoints}`);
+
+        if (this.playerPoints >= 500) {
+            console.log('Player has enough points to redeem reward');
+            // Add logic to redeem reward...
+            this.playerPoints -= 500; // Deduct points after redeeming reward
+        }
     }
 
 	update(t: number, dt: number)
