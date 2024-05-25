@@ -99,8 +99,10 @@ export default class Game extends Phaser.Scene
         })
         const bulletinsLayer = map.getObjectLayer('Bulletins')
         bulletinsLayer.objects.forEach(bulletinObj => {
-            this.bulletins.get(bulletinObj.x! + bulletinObj.width! * 0.5, bulletinObj.y! - bulletinObj.height! * 0.5, 'bulletin')
-        })
+           // this.bulletins.get(bulletinObj.x! + bulletinObj.width! * 0.5, bulletinObj.y! - bulletinObj.height! * 0.5, 'bulletin')
+		   const bulletin = this.bulletins.get(bulletinObj.x! + bulletinObj.width! * 0.5, bulletinObj.y! - bulletinObj.height! * 0.5, 'bulletin');
+		   bulletin.setScale(1);
+		 })
 
 		this.physics.add.collider(this.faune, wallsLayer)
 		this.physics.add.collider(this.lizards, wallsLayer)
@@ -112,8 +114,12 @@ export default class Game extends Phaser.Scene
 		this.physics.add.collider(this.faune, this.bulletins, this.handlePlayerBulletinCollision, undefined, this);
 
 		this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.faune, this.handlePlayerLizardCollision, undefined, this)
-  		this.bulletinPopup = new Popup(this);
-        this.events.on('volunteer-signup', this.handleVolunteerSignup, this);
+  		this.bulletinPopup = new Popup(this);// Event listener for point changes
+		  this.registry.events.on('points-changed', (points) => {
+			  console.log(`Points changed: ${points}`);
+			  this.playerPoints = points;
+			  // Update UI or any other logic based on points
+		  });
 
 		
 	}
@@ -161,25 +167,16 @@ export default class Game extends Phaser.Scene
     	this.bulletinPopup.showVolunteeringOpportunities();
     }
 
-	private handleVolunteerSignup(item: { date: string; event: string }) {
-        console.log(`Signed up for ${item.event} on ${item.date}`);
-        this.playerPoints += 100; // Example: Earn 100 points for signing up
-        console.log(`Player points: ${this.playerPoints}`);
-
-        if (this.playerPoints >= 500) {
-            console.log('Player has enough points to redeem reward');
-            // Add logic to redeem reward...
-            this.playerPoints -= 500; // Deduct points after redeeming reward
-        }
-    }
 
 	update(t: number, dt: number)
 	{
 		if (this.faune)
 		{
-			this.faune.update(this.cursors)
-			this.bulletinPopup.update(this.faune.x, this.faune.y)
+			this.faune.update(this.cursors)		
 		}
+		
+        // Update popup position based on player's position
+        this.bulletinPopup.update(this.faune.x, this.faune.y);
 
 	}
 }
