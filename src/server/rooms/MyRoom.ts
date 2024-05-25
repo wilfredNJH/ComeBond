@@ -11,7 +11,6 @@ export class MyRoom extends Room<MyRoomState> {
     /***************
     * Player States
     ***************/
-
     this.onMessage("move", (client, message) => {
       // message is expected to be: { x: number, y: number }
       console.log(client.sessionId + "pos x " + message.x + "pos y" + message.y)
@@ -21,7 +20,13 @@ export class MyRoom extends Room<MyRoomState> {
     // Handle player joining
     this.onMessage("join", (client, message) => {
       this.state.addPlayer(client.sessionId, 0, 0); // Add player at position (0, 0)
+      // broadcast to all players that a new player has joined 
+      this.broadcast('newplayer', client.sessionId, {
+        except: client
+      })
     });
+
+    
 
   }
 

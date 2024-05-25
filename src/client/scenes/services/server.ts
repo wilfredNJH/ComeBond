@@ -3,13 +3,14 @@ import Phaser from 'phaser'
 
 // import { MyRoomState } from '../../../server/rooms/schema/MyRoomState'; // Import your state classes
 import * as Colyseus from "colyseus.js" // not necessary if included via <script> tag. // TODO: remove TEST 
+import Faune from '~/client/characters/Faune';
 
 
 export default class Server extends Phaser.Scene
 {
     private client!: Colyseus.Client
-    // private room: Colyseus.Room<MyRoomState>;
-    private playerSprites: { [key: string]: Phaser.GameObjects.Sprite } = {};
+    // private playerSprites: { [key: string]: Phaser.GameObjects.Sprite } = {};
+    private playerSprites: { [key: string]: Faune } = {};
 
 
     preload() {
@@ -40,24 +41,33 @@ export default class Server extends Phaser.Scene
         this.client.joinOrCreate("my_room").then(room => {
             console.log("joined successfully", room);
             
-            // // Handle player state updates
-            room.state.players.onAdd = (player, sessionId) => {
-                this.addPlayer(sessionId, player);
-                console.log(`Player ${sessionId} added:`, player);
-            };
+            // Handle player state updates
+            // room.state.players.onAdd = (player, sessionId) => {
+            //     console.log('new player has joineeddd!!!!!')
+            //     this.addPlayer(sessionId, player);
+            //     console.log(`Player ${sessionId} added:`, player);
+            // };
             
-            room.state.players.onRemove = (player, sessionId) => {
-                this.removePlayer(sessionId);
-                console.log(`Player ${sessionId} removed:`, player);
-            };
+            // room.state.players.onRemove = (player, sessionId) => {
+            //     this.removePlayer(sessionId);
+            //     console.log(`Player ${sessionId} removed:`, player);
+            // };
             
-            room.state.players.onChange = (player, sessionId) => {
-                this.updatePlayer(sessionId, player);
-                console.log(`Player ${sessionId} changed:`, player);
-            };
+            // room.state.players.onChange = (player, sessionId) => {
+            //     this.updatePlayer(sessionId, player);
+            //     console.log(`Player ${sessionId} changed:`, player);
+            // };
             
             // Send a join message
             room.send("join");
+
+            // Some other player joined 
+            room.onMessage('newplayer', (sessionId) => {
+                console.log('new player' + sessionId + 'has joined the room')
+                
+                this.playerSprites[sessionId] = this.add.faune(0, 0, 'faune')
+
+            })
             
             // Send a move message
             document.addEventListener("keydown", (event) => {
@@ -92,20 +102,20 @@ export default class Server extends Phaser.Scene
         // this.playerSprites[sessionId] = sprite;
     }
 
-    removePlayer(sessionId: string) {
-        // Remove player sprite
-        if (this.playerSprites[sessionId]) {
-            this.playerSprites[sessionId].destroy();
-            delete this.playerSprites[sessionId];
-        }
-    }
+    // removePlayer(sessionId: string) {
+    //     // Remove player sprite
+    //     if (this.playerSprites[sessionId]) {
+    //         this.playerSprites[sessionId].destroy();
+    //         delete this.playerSprites[sessionId];
+    //     }
+    // }
 
-    updatePlayer(sessionId: string, player: Player) {
-        // Update player sprite position
-        const sprite = this.playerSprites[sessionId];
-        if (sprite) {
-            sprite.x = player.x;
-            sprite.y = player.y;
-        }
-    }
+    // updatePlayer(sessionId: string, player: Player) {
+    //     // Update player sprite position
+    //     const sprite = this.playerSprites[sessionId];
+    //     if (sprite) {
+    //         sprite.x = player.x;
+    //         sprite.y = player.y;
+    //     }
+    // }
 }
