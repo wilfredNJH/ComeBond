@@ -25,8 +25,6 @@ export default class Game extends Phaser.Scene
 
 	private playerLizardsCollider?: Phaser.Physics.Arcade.Collider
 
-	private otherPlayerSprites?: { [key: string]: Faune } = {};
-
 	constructor()
 	{
 		super('game')
@@ -44,6 +42,8 @@ export default class Game extends Phaser.Scene
 		***************/
 		const { server } = data
 		server.join() 
+
+		server.passGameScene(this)
 
 		this.scene.run('game-ui')
 

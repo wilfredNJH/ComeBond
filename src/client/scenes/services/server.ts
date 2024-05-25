@@ -3,16 +3,15 @@ import Phaser from 'phaser'
 
 // import { MyRoomState } from '../../../server/rooms/schema/MyRoomState'; // Import your state classes
 import * as Colyseus from "colyseus.js" // not necessary if included via <script> tag. // TODO: remove TEST 
+import Faune from '~/client/characters/Faune';
 
-import '../../characters/Faune'
-import Faune from '../../characters/Faune'
 
 export default class Server extends Phaser.Scene
 {
     private client!: Colyseus.Client
     // private playerSprites: { [key: string]: Phaser.GameObjects.Sprite } = {};
     private playerSprites: { [key: string]: Faune } = {};
-
+    private gameScene!: Phaser.Scene
 
     preload() {
     }
@@ -65,8 +64,8 @@ export default class Server extends Phaser.Scene
             // Some other player joined 
             room.onMessage('newplayer', (sessionId) => {
                 console.log('new player' + sessionId + 'has joined the room')
-                
-                this.playerSprites[sessionId] = this.add.faune(128, 128, 'faune')
+                console.log(this.add)
+                this.playerSprites[sessionId] = this.gameScene.add.faune(128, 128, 'faune')
 
             })
             
@@ -94,7 +93,10 @@ export default class Server extends Phaser.Scene
         });
     }
 
-
+    passGameScene(pGameScene: any){
+        this.gameScene = pGameScene
+    }
+    
     addPlayer(sessionId: string, player: Player) {
         // Add player sprite
         // const sprite = this.add.faune(128, 128, 'faune'); 
