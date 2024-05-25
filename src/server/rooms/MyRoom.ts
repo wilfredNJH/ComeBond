@@ -26,12 +26,21 @@ export class MyRoom extends Room<MyRoomState> {
       });
     });
 
+    this.onMessage("chat", (client, message) => {
+      console.log(`Chat from ${client.sessionId}: ${message}`);
+      //this.state.messages.push(`${client.sessionId}: ${message}`);
+      console.log
+      this.broadcast('chat', {
+        clientId: client.sessionId,
+        message: message
+      });
+      //this.printMessages();
+    });
+
     // Handle player joining
     this.onMessage("join", (client, message) => {
       this.state.addPlayer(client.sessionId, 128, 128); // Add player at position (0, 0)
     });
-
-    
 
   }
 

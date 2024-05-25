@@ -12,7 +12,7 @@ import Faune from '../characters/Faune'
 
 import { sceneEvents } from '../events/EventsCenter'
 import Chest from '../items/Chest'
-import type Server from './services/client_server'
+import Server from './services/client_server'
 
 export default class Game extends Phaser.Scene
 {
@@ -24,7 +24,8 @@ export default class Game extends Phaser.Scene
 	private lizards!: Phaser.Physics.Arcade.Group
 
 	private playerLizardsCollider?: Phaser.Physics.Arcade.Collider
-
+    public messageBoxTest: { [key: string]: Phaser.GameObjects.Container } = {};
+	public server!: Server;
 	constructor()
 	{
 		super('game')
@@ -40,9 +41,10 @@ export default class Game extends Phaser.Scene
 		/***************
 		 * SERVER START 
 		***************/
-		const { server } = data
+		const { server } = data 
+		this.server = server;
 		server.join() 
-
+		this.messageBoxTest = server.messageBox;
 		server.passGameScene(this)
 
 		this.scene.run('game-ui')
@@ -137,12 +139,20 @@ export default class Game extends Phaser.Scene
 			this.playerLizardsCollider?.destroy()
 		}
 	}
+	private updateMessageBoxPosition(server:Server, playerID: string ) {
+			this.messageBoxTest[playerID].setPosition(this.faune.x, this.faune.y - this.faune.height - 20);
+		}
 	
 	update(t: number, dt: number)
 	{
 		if (this.faune)
 		{
-			this.faune.update(this.cursors)
+			this.faune.update(this.cursors);
+			console.log("update" +this.server.sessionID);
+
+			if(this.server.sessionID){
+			this.updateMessageBoxPosition(this.server,this.server.sessionID);
+			}
 		}
 	}
 }
