@@ -112,6 +112,8 @@ export default class Game extends Phaser.Scene
 		this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.faune, this.handlePlayerLizardCollision, undefined, this)
 		this.bulletinPopup = new Popup(this);
       
+        // Listen for points change event
+        this.registry.events.on('points-changed', this.updatePoints, this);
 
 		
 	}
@@ -158,7 +160,10 @@ export default class Game extends Phaser.Scene
 		console.log('Player collided with bulletin'); // Debug statement
     	this.bulletinPopup.showVolunteeringOpportunities();
     }
-	
+	private updatePoints(points: number) {
+        console.log(`Player's points: ${points}`);
+        // Update UI with the new points value, if any UI exists for points
+    }
 	update(t: number, dt: number)
 	{
 		if (this.faune)
