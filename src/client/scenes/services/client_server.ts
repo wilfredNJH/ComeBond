@@ -53,7 +53,6 @@ export default class Server extends Phaser.Scene
                 this.createMessageBox(sessionId,player);
             };
             
-
             // room.state.players.onRemove = (player, sessionId) => {
             //     this.removePlayer(sessionId);
             //     console.log(`Player ${sessionId} removed:`, player);
@@ -73,7 +72,6 @@ export default class Server extends Phaser.Scene
             });
         
             this.gameScene.input.keyboard.on('keydown', (evt: KeyboardEvent) => {
-                
                 if (evt.key === 'Enter') {
                     if (this.isChatting && this.chatInput.value.trim() !== '') {
                         room.send('chat', this.chatInput.value.trim());
@@ -101,7 +99,6 @@ export default class Server extends Phaser.Scene
                     
                     // update the corresponding player's position 
                     this.otherPlayers[sessionId].setPosition(x, y)
-
                 }
             });
               
