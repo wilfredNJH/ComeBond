@@ -124,6 +124,7 @@ class Popup {
             { date: '2024-07-05', event: 'Community Garden' },
             { date: '2024-07-20', event: 'River Restoration' },
             { date: '2024-08-10', event: 'Animal Shelter' },
+            { date: '', event: 'More events' },
         ];
 
         // Clear any previous text items
@@ -132,7 +133,12 @@ class Popup {
 
         let yOffset = -100;
         bulletinContent.forEach((item) => {
-            const text = `${item.date} | ${item.event}`;
+            var text = ''
+            if (item.event === 'More events'){
+                text = `${item.event}`;
+            }else{
+                text = `${item.date} | ${item.event}`;
+            }
             const textObject = this.scene.add.text(0, yOffset, text, {
                 fontSize: '14px',
                 color: '#ffffff',
@@ -141,7 +147,23 @@ class Popup {
             });
             textObject.setOrigin(0.5, 0.5);
             textObject.setInteractive({ useHandCursor: true });
-            textObject.on('pointerdown', () => this.handleItemClick(item));
+            if (item.event === 'More events') {
+                // Add an underline graphic
+                const underline = this.scene.add.graphics();
+                underline.lineStyle(1, 0xffffff, 1);
+                underline.lineBetween(
+                    textObject.x - textObject.width / 2,
+                    textObject.y + textObject.height / 2 + 2,
+                    textObject.x + textObject.width / 2,
+                    textObject.y + textObject.height / 2 + 2
+                );
+                this.container.add(underline);
+                textObject.on('pointerdown', () => {
+                    window.open('https://www.volunteer.gov.sg/', '_blank');
+                });
+            } else {
+                textObject.on('pointerdown', () => this.handleItemClick(item));
+            }
             this.container.add(textObject);
             this.textItems.push(textObject);
 
@@ -200,7 +222,6 @@ class Popup {
         if (name && email && phone) {
             // Perform signup logic here (e.g., send data to server, update UI, etc.)
             this.signUpSuccessText.setText('Sign-up successful!');
-            console.log('signup success')
             this.resetSignUpForm();
         } else {
             this.signUpSuccessText.setText('Please fill out all fields.');
