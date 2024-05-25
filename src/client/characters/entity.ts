@@ -27,7 +27,7 @@ export default class entity extends Phaser.Physics.Arcade.Sprite
 	private damageTime = 0
 
 	private _health = 3
-	private _coins = 0
+	public _coins = 40
 
 	private knives?: Phaser.Physics.Arcade.Group
 	private activeChest?: Chest

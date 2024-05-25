@@ -17,6 +17,7 @@ import Bulletin from '../items/Bulletin'
 import { createBulletinAnims } from '../anims/BulletinAnims'
 
 import Popup from '../utils/Popup'; // Import the Popup class
+import Shop from '../utils/Shop';
 
 export default class Game extends Phaser.Scene
 {
@@ -39,6 +40,9 @@ export default class Game extends Phaser.Scene
 	private bulletins!: Phaser.Physics.Arcade.StaticGroup
 
     private playerPoints: number = 0;
+
+	private shop!: Shop;
+
 
 	constructor()
 	{
@@ -102,6 +106,8 @@ export default class Game extends Phaser.Scene
 
         this.entity = this.add.entity(128, 128, 'lizard')
       }
+
+	  	this.shop = new Shop(this, this.entity);
 		this.entity.setKnives(this.knives)
 
 		this.server.passGameScene(this, this.entity)
@@ -161,10 +167,15 @@ export default class Game extends Phaser.Scene
 		
 	}
 
+	// private handlePlayerChestCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
+	// {
+	// 	const chest = obj2 as Chest
+	// 	this.entity.setChest(chest)
+	// }
+
 	private handlePlayerChestCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
 	{
-		const chest = obj2 as Chest
-		this.entity.setChest(chest)
+		this.shop.showShopItems(this.shop.items);
 	}
 
 	private handleKnifeWallCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
