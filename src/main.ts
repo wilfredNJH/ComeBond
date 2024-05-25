@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 
 import Preloader from './client/scenes/Preloader'
 import Game from './client/scenes/Game'
+import StartScreen from './client/scenes/StartScreen'
 import GameUI from './client/scenes/GameUI'
 
 const config = {
@@ -16,7 +17,7 @@ const config = {
 			// gravity: { y: 200 },
 		},
 	},
-	scene: [Preloader, Game, GameUI],
+	scene: [ Preloader, StartScreen, Game, GameUI],
 }
 
 export default new Phaser.Game(config)
