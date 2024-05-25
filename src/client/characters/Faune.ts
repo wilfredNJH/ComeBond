@@ -202,7 +202,7 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 		// 	return
 		// }
 
-		const speed = 10
+		const speed = 100
 
 		if (!this.isLizard) {
 			if (movementCode === 1) {

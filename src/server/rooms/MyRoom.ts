@@ -20,7 +20,8 @@ export class MyRoom extends Room<MyRoomState> {
       this.broadcast('othermove', {
         sessionId: client.sessionId,
         x: message.x,
-        y: message.y
+        y: message.y,
+        currKey:message.currKey
       }, {
         except: client
       });
