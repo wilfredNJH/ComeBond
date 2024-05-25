@@ -9,7 +9,7 @@ declare global
 	{
 		interface GameObjectFactory
 		{
-			faune(x: number, y: number, texture: string, frame?: string | number): Faune
+			entity(x: number, y: number, texture: string, frame?: string | number): entity
 		}
 	}
 }
@@ -21,7 +21,7 @@ enum HealthState
 	DEAD
 }
 
-export default class Faune extends Phaser.Physics.Arcade.Sprite
+export default class entity extends Phaser.Physics.Arcade.Sprite
 {
 	private healthState = HealthState.IDLE
 	private damageTime = 0
@@ -46,7 +46,7 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 			this.isLizard = true;
 		}
 		else
-		this.anims.play('faune-idle-down')
+		this.anims.play('entity-idle-down')
 	}
 
 	setKnives(knives: Phaser.Physics.Arcade.Group)
@@ -77,7 +77,7 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 		{
 			// TODO: die
 			this.healthState = HealthState.DEAD
-			this.anims.play('faune-faint')
+			this.anims.play('entity-faint')
 			this.setVelocity(0, 0)
 		}
 		else
@@ -206,25 +206,25 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 
 		if (!this.isLizard) {
 			if (movementCode === 1) {
-				this.anims.play('faune-run-side', true)
+				this.anims.play('entity-run-side', true)
 				this.setVelocity(-speed, 0)
 
 				this.scaleX = -1
 				this.body.offset.x = 24
 			}
 			else if (movementCode === 2) {
-				this.anims.play('faune-run-side', true)
+				this.anims.play('entity-run-side', true)
 				this.setVelocity(speed, 0)
 
 				this.scaleX = 1
 				this.body.offset.x = 8
 			}
 			else if (movementCode === 3) {
-				this.anims.play('faune-run-up', true)
+				this.anims.play('entity-run-up', true)
 				this.setVelocity(0, -speed)
 			}
 			else if (movementCode === 4) {
-				this.anims.play('faune-run-down', true)
+				this.anims.play('entity-run-down', true)
 				this.setVelocity(0, speed)
 			}
 			else {
@@ -305,25 +305,25 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 		const downDown = cursors.down?.isDown
 		if (!this.isLizard) {
 			if (leftDown) {
-				this.anims.play('faune-run-side', true)
+				this.anims.play('entity-run-side', true)
 				this.setVelocity(-speed, 0)
 
 				this.scaleX = -1
 				this.body.offset.x = 24
 			}
 			else if (rightDown) {
-				this.anims.play('faune-run-side', true)
+				this.anims.play('entity-run-side', true)
 				this.setVelocity(speed, 0)
 
 				this.scaleX = 1
 				this.body.offset.x = 8
 			}
 			else if (upDown) {
-				this.anims.play('faune-run-up', true)
+				this.anims.play('entity-run-up', true)
 				this.setVelocity(0, -speed)
 			}
 			else if (downDown) {
-				this.anims.play('faune-run-down', true)
+				this.anims.play('entity-run-down', true)
 				this.setVelocity(0, speed)
 			}
 			else {
@@ -367,8 +367,8 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 	}
 }
 
-Phaser.GameObjects.GameObjectFactory.register('faune', function (this: Phaser.GameObjects.GameObjectFactory, x: number, y: number, texture: string, frame?: string | number) {
-	var sprite = new Faune(this.scene, x, y, texture, frame)
+Phaser.GameObjects.GameObjectFactory.register('entity', function (this: Phaser.GameObjects.GameObjectFactory, x: number, y: number, texture: string, frame?: string | number) {
+	var sprite = new entity(this.scene, x, y, texture, frame)
 
 	this.displayList.add(sprite)
 	this.updateList.add(sprite)

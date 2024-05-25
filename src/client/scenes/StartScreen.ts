@@ -23,7 +23,7 @@ export default class StartScreen extends Phaser.Scene {
 
         // Display sprite selection buttons using frames from atlases
         this.spriteSelection = [
-            this.add.image(200, 300, 'faune', 'walk-down-1.png').setInteractive(),
+            this.add.image(200, 300, 'entity', 'walk-down-1.png').setInteractive(),
             this.add.image(400, 300, 'lizard', 'idle-1.png').setInteractive()
         ]
 

@@ -2,44 +2,44 @@ import Phaser from 'phaser'
 
 const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) => {
 	anims.create({
-		key: 'faune-idle-down',
-		frames: [{ key: 'faune', frame: 'walk-down-3.png' }]
+		key: 'entity-idle-down',
+		frames: [{ key: 'entity', frame: 'walk-down-3.png' }]
 	})
 
 	anims.create({
-		key: 'faune-idle-up',
-		frames: [{ key: 'faune', frame: 'walk-up-3.png' }]
+		key: 'entity-idle-up',
+		frames: [{ key: 'entity', frame: 'walk-up-3.png' }]
 	})
 
 	anims.create({
-		key: 'faune-idle-side',
-		frames: [{ key: 'faune', frame: 'walk-side-3.png' }]
+		key: 'entity-idle-side',
+		frames: [{ key: 'entity', frame: 'walk-side-3.png' }]
 	})
 
 	anims.create({
-		key: 'faune-run-down',
-		frames: anims.generateFrameNames('faune', { start: 1, end: 8, prefix: 'run-down-', suffix: '.png' }),
+		key: 'entity-run-down',
+		frames: anims.generateFrameNames('entity', { start: 1, end: 8, prefix: 'run-down-', suffix: '.png' }),
 		repeat: -1,
 		frameRate: 15
 	})
 
 	anims.create({
-		key: 'faune-run-up',
-		frames: anims.generateFrameNames('faune', { start: 1, end: 8, prefix: 'run-up-', suffix: '.png' }),
+		key: 'entity-run-up',
+		frames: anims.generateFrameNames('entity', { start: 1, end: 8, prefix: 'run-up-', suffix: '.png' }),
 		repeat: -1,
 		frameRate: 15
 	})
 
 	anims.create({
-		key: 'faune-run-side',
-		frames: anims.generateFrameNames('faune', { start: 1, end: 8, prefix: 'run-side-', suffix: '.png' }),
+		key: 'entity-run-side',
+		frames: anims.generateFrameNames('entity', { start: 1, end: 8, prefix: 'run-side-', suffix: '.png' }),
 		repeat: -1,
 		frameRate: 15
 	})
 
 	anims.create({
-		key: 'faune-faint',
-		frames: anims.generateFrameNames('faune', { start: 1, end: 4, prefix: 'faint-', suffix: '.png' }),
+		key: 'entity-faint',
+		frames: anims.generateFrameNames('entity', { start: 1, end: 4, prefix: 'faint-', suffix: '.png' }),
 		frameRate: 15
 	})
 }

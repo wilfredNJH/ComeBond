@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 
 // import { MyRoomState } from '../../../server/rooms/schema/MyRoomState'; // Import your state classes
 import * as Colyseus from "colyseus.js" // not necessary if included via <script> tag. // TODO: remove TEST 
-import Faune from '~/client/characters/Faune';
+import entity from '~/client/characters/entity';
 import { Room } from 'colyseus';
 
 
@@ -11,9 +11,9 @@ export default class Server extends Phaser.Scene
 {
     private client!: Colyseus.Client
     private mRoom!: any
-    private otherPlayers: { [key: string]: Faune } = {};
+    private otherPlayers: { [key: string]: entity } = {};
     private gameScene!: Phaser.Scene
-    private playerFaune!: Faune
+    private playerentity!: entity
 
     private chatInput!: HTMLInputElement;
     private isChatting: boolean = false;
@@ -121,8 +121,8 @@ export default class Server extends Phaser.Scene
                 // TODO : need to fix this 
                 if (currentPlayer) {
                     // TODO : fix this 
-                    let x = this.playerFaune.x
-                    let y = this.playerFaune.y
+                    let x = this.playerentity.x
+                    let y = this.playerentity.y
                     console.log('x ', x , 'y ', y)
                     this.mRoom.send("move", { x , y });
                 }
@@ -133,15 +133,15 @@ export default class Server extends Phaser.Scene
         });
     }
 
-    passGameScene(pGameScene: any, pPlayerFaune: any){
+    passGameScene(pGameScene: any, pPlayerentity: any){
         this.gameScene = pGameScene
-        this.playerFaune = pPlayerFaune
+        this.playerentity = pPlayerentity
     }
 
     addPlayer(sessionId: string, posX: number, posY: number) {
         if(this.mRoom.sessionId != sessionId){
             console.log('CREATED OTHER PLAYER' + sessionId + 'current ID' + this.mRoom.sessionId)
-            this.otherPlayers[sessionId] = this.gameScene.add.faune(posX, posY, 'faune')
+            this.otherPlayers[sessionId] = this.gameScene.add.entity(posX, posY, 'entity')
 
         }
     }
@@ -164,7 +164,7 @@ export default class Server extends Phaser.Scene
         document.body.appendChild(input);
         this.chatInput = input;
     }
-    createMessageBox(playerId: string, player: Faune): Phaser.GameObjects.Container {
+    createMessageBox(playerId: string, player: entity): Phaser.GameObjects.Container {
         console.log(playerId);
         const boxWidth = 40;
         const boxHeight = 30;

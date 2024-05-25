@@ -7,8 +7,8 @@ import { createChestAnims } from '../anims/TreasureAnims'
 
 import Lizard from '../enemies/Lizard'
 
-import '../characters/Faune'
-import Faune from '../characters/Faune'
+import '../characters/entity'
+import entity from '../characters/entity'
 
 import { sceneEvents } from '../events/EventsCenter'
 import Chest from '../items/Chest'
@@ -22,7 +22,7 @@ export default class Game extends Phaser.Scene
 {
 
 	private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
-	private faune!: Faune
+	private entity!: entity
 
 	private knives!: Phaser.Physics.Arcade.Group
 	private lizards!: Phaser.Physics.Arcade.Group
@@ -94,18 +94,18 @@ export default class Game extends Phaser.Scene
 		})
 
       if (this.selectedSpriteIndex == 0) {
-        console.log("FAUNE");
-        this.faune = this.add.faune(128, 128, 'faune')
+        console.log("entity");
+        this.entity = this.add.entity(128, 128, 'entity')
       }
       else {
         console.log("LIZARD");
 
-        this.faune = this.add.faune(128, 128, 'lizard')
+        this.entity = this.add.entity(128, 128, 'lizard')
       }
-		this.faune.setKnives(this.knives)
+		this.entity.setKnives(this.knives)
 
-		this.server.passGameScene(this, this.faune)
-		this.cameras.main.startFollow(this.faune, true)
+		this.server.passGameScene(this, this.entity)
+		this.cameras.main.startFollow(this.entity, true)
 
 		const chests = this.physics.add.staticGroup({
 			classType: Chest
@@ -115,7 +115,7 @@ export default class Game extends Phaser.Scene
 			chests.get(chestObj.x! + chestObj.width! * 0.5, chestObj.y! - chestObj.height! * 0.5, 'treasure')
 		})
 
-		this.cameras.main.startFollow(this.faune, true)
+		this.cameras.main.startFollow(this.entity, true)
 
 		this.lizards = this.physics.add.group({
 			classType: Lizard,
@@ -141,16 +141,16 @@ export default class Game extends Phaser.Scene
 		   bulletin.setScale(1);
 		 })
 
-		this.physics.add.collider(this.faune, wallsLayer)
+		this.physics.add.collider(this.entity, wallsLayer)
 		this.physics.add.collider(this.lizards, wallsLayer)
 
-		this.physics.add.collider(this.faune, chests, this.handlePlayerChestCollision, undefined, this)
+		this.physics.add.collider(this.entity, chests, this.handlePlayerChestCollision, undefined, this)
 
 		this.physics.add.collider(this.knives, wallsLayer, this.handleKnifeWallCollision, undefined, this)
 		this.physics.add.collider(this.knives, this.lizards, this.handleKnifeLizardCollision, undefined, this)
-		this.physics.add.collider(this.faune, this.bulletins, this.handlePlayerBulletinCollision, undefined, this);
+		this.physics.add.collider(this.entity, this.bulletins, this.handlePlayerBulletinCollision, undefined, this);
 
-		this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.faune, this.handlePlayerLizardCollision, undefined, this)
+		this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.entity, this.handlePlayerLizardCollision, undefined, this)
   		this.bulletinPopup = new Popup(this);// Event listener for point changes
 		  this.registry.events.on('points-changed', (points) => {
 			  console.log(`Points changed: ${points}`);
@@ -164,7 +164,7 @@ export default class Game extends Phaser.Scene
 	private handlePlayerChestCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
 	{
 		const chest = obj2 as Chest
-		this.faune.setChest(chest)
+		this.entity.setChest(chest)
 	}
 
 	private handleKnifeWallCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
@@ -182,22 +182,22 @@ export default class Game extends Phaser.Scene
 	{
 		const lizard = obj2 as Lizard
 		
-		const dx = this.faune.x - lizard.x
-		const dy = this.faune.y - lizard.y
+		const dx = this.entity.x - lizard.x
+		const dy = this.entity.y - lizard.y
 
 		const dir = new Phaser.Math.Vector2(dx, dy).normalize().scale(200)
 
-		this.faune.handleDamage(dir)
+		this.entity.handleDamage(dir)
 
-		sceneEvents.emit('player-health-changed', this.faune.health)
+		sceneEvents.emit('player-health-changed', this.entity.health)
 
-		if (this.faune.health <= 0)
+		if (this.entity.health <= 0)
 		{
 			this.playerLizardsCollider?.destroy()
 		}
 	}
 	private updateMessageBoxPosition(server:Server, playerID: string ) {
-			this.messageBoxTest[playerID].setPosition(this.faune.x, this.faune.y - this.faune.height - 20);
+			this.messageBoxTest[playerID].setPosition(this.entity.x, this.entity.y - this.entity.height - 20);
 		}
 	
 
@@ -211,9 +211,9 @@ export default class Game extends Phaser.Scene
 
 	update(t: number, dt: number)
 	{
-		if (this.faune)
+		if (this.entity)
 		{
-			this.faune.update(this.cursors);
+			this.entity.update(this.cursors);
 			
 			if(this.messageBoxTest[this.server.sessionID]){
 				this.updateMessageBoxPosition(this.server,this.server.sessionID);
@@ -221,7 +221,7 @@ export default class Game extends Phaser.Scene
 		}
 		
         // Update popup position based on player's position
-        this.bulletinPopup.update(this.faune.x, this.faune.y);
+        this.bulletinPopup.update(this.entity.x, this.entity.y);
 
 	}
 }
