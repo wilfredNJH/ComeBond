@@ -20,7 +20,6 @@ export class MyRoom extends Room<MyRoomState> {
 
     // Handle player joining
     this.onMessage("join", (client, message) => {
-      console.log(client.sessionId + 'has joined!!!!')
       this.state.addPlayer(client.sessionId, 0, 0); // Add player at position (0, 0)
     });
 

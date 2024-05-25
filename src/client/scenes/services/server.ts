@@ -62,12 +62,19 @@ export default class Server extends Phaser.Scene
             // Send a move message
             document.addEventListener("keydown", (event) => {
                 const key = event.key;
-                let x = 0, y = 0; // TODO: get from current player's pos
+                let x = 0, y = 0; 
 
-                if (key === "ArrowUp") y = -1;
-                if (key === "ArrowDown") y = 1;
-                if (key === "ArrowLeft") x = -1;
-                if (key === "ArrowRight") x = 1;
+                // Get current player's position from the game state
+                const currentPlayer = room.state.players[room.sessionId];
+                if (currentPlayer) {
+                    x = currentPlayer.x;
+                    y = currentPlayer.y;
+                }
+
+                if (key === "ArrowUp") y += -1;
+                if (key === "ArrowDown") y += 1;
+                if (key === "ArrowLeft") x += -1;
+                if (key === "ArrowRight") x += 1;
                 
                 room.send("move", { x, y });
             });
