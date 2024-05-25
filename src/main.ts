@@ -1,6 +1,7 @@
 import 'regenerator-runtime/runtime'
 import Phaser from 'phaser'
 
+
 import Preloader from './client/scenes/Preloader'
 import Game from './client/scenes/Game'
 import StartScreen from './client/scenes/StartScreen'

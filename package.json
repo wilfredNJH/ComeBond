@@ -24,6 +24,7 @@
 		"colyseus": "^0.14.20",
 		"colyseus.js": "^0.14.13",
 		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
 		"express": "^4.16.4",
 		"phaser": "^3.55.2",
 		"regenerator-runtime": "^0.14.1"

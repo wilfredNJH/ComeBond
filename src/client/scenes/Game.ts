@@ -35,6 +35,9 @@ export default class Game extends Phaser.Scene
 	private selectedSpriteIndex!: number
 	private backgroundMusic?: Phaser.Sound.BaseSound
 
+	private userPosition?: { latitude: number, longitude: number }
+	private streetName?: string
+
 	
 	private bulletinPopup!: Popup; // Add a property for the Popup
 	private bulletins!: Phaser.Physics.Arcade.StaticGroup
@@ -60,7 +63,9 @@ export default class Game extends Phaser.Scene
       this.selectedSpriteIndex = data.selectedSprite
       this.server = data.server
 
-  }
+	  this.getUserGeolocation()
+
+  	}
 
     async create()
     {
@@ -231,4 +236,44 @@ export default class Game extends Phaser.Scene
 		
 
 	}
+
+	getUserGeolocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    this.userPosition = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }
+                    console.log('User position:', this.userPosition)
+                    this.getStreetName(this.userPosition.latitude, this.userPosition.longitude)
+                },
+                (error) => {
+                    console.error('Error getting geolocation:', error)
+                }
+            )
+        } else {
+            console.error('Geolocation is not supported by this browser.')
+        }
+    }
+
+	getStreetName(latitude: number, longitude: number) {
+		const apiKey = process.env.OPENCAGE_API_KEY
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.results && data.results.length > 0) {
+                    const components = data.results[0].components
+                    this.streetName = components.road || components.neighbourhood || 'Unknown location'
+                    console.log('Location:', this.streetName)
+                } else {
+                    console.error('No results found for the given coordinates.')
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching street name:', error)
+            })
+    }
 }
