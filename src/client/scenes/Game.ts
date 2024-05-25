@@ -156,7 +156,7 @@ export default class Game extends Phaser.Scene
 		this.physics.add.collider(this.knives, this.lizards, this.handleKnifeLizardCollision, undefined, this)
 		this.physics.add.collider(this.entity, this.bulletins, this.handlePlayerBulletinCollision, undefined, this);
 
-		this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.entity, this.handlePlayerLizardCollision, undefined, this)
+		// this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.entity, this.handlePlayerLizardCollision, undefined, this)
   		this.bulletinPopup = new Popup(this);// Event listener for point changes
 		  this.registry.events.on('points-changed', (points) => {
 			  console.log(`Points changed: ${points}`);
@@ -243,9 +243,9 @@ export default class Game extends Phaser.Scene
 			}
 			// else if(this.messageBoxTest[])
 		}
-		
         // Update popup position based on player's position
         this.bulletinPopup.update(this.entity.x, this.entity.y);
+		
 
 	}
 }
