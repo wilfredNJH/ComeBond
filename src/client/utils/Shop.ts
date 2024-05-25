@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
-import Faune from '../characters/entity';
-import entity from '../characters/entity';
+import Entity from '../characters/Entity'; // Adjust import path as needed
 
 class Shop {
     private scene: Phaser.Scene;
@@ -15,16 +14,18 @@ class Shop {
     private confirmText: Phaser.GameObjects.Text;
     private confirmCancelButton: Phaser.GameObjects.Text;
     private confirmOkButton: Phaser.GameObjects.Text;
-    private entity: entity;
+    private entity: Entity;
 
     // Items available for purchase (example data)
     public items: { name: string; price: number }[];
 
-    constructor(scene: Phaser.Scene, entity: entity) {
+    private selectedIdx: number = -1; // Track the index of the selected item
+
+    constructor(scene: Phaser.Scene, entity: Entity) {
         this.scene = scene;
         this.entity = entity;
         this.items = [
-            { name: '$50 shopping voucher', price: 20 },
+            { name: '$20 shopping voucher', price: 20 },
             { name: 'Jabra Earphones', price: 50 },
             { name: 'Coca-Cola Mug', price: 10 }
             // Add more items as needed
@@ -36,7 +37,7 @@ class Shop {
         const boxY = scene.cameras.main.y;
 
         // Main shop container
-        this.background = scene.add.rectangle(this.entity.x, this.entity.y, boxWidth, boxHeight, 0x000000, 1);
+        this.background = scene.add.rectangle(boxX, boxY, boxWidth, boxHeight, 0x000000, 1);
         this.background.setOrigin(0.5, 0.5);
 
         this.closeButton = scene.add.text(0, -180, 'Close', {
@@ -102,7 +103,7 @@ class Shop {
         this.textItems = [];
 
         let yOffset = -150;
-        items.forEach(item => {
+        items.forEach((item, index) => { // Include index in forEach loop
             const text = `${item.name}: $${item.price}`;
             const textObject = this.scene.add.text(0, yOffset, text, {
                 fontSize: '16px',
@@ -112,7 +113,10 @@ class Shop {
             });
             textObject.setOrigin(0.5, 0.5);
             textObject.setInteractive({ useHandCursor: true });
-            textObject.on('pointerdown', () => this.showConfirmation(item));
+            textObject.on('pointerdown', () => {
+                this.selectedIdx = index; // Store the index of the selected item
+                this.showConfirmation(item); // Pass item to showConfirmation
+            });
             this.container.add(textObject);
             this.textItems.push(textObject);
 
@@ -129,22 +133,18 @@ class Shop {
     }
 
     private confirmPurchase() {
-        if (this.entity) {
-            const selectedItem = this.textItems.find(text => text.scaleX === 1);
-            if (selectedItem) {
-                const itemIndex = this.textItems.indexOf(selectedItem);
-                const item = this.items[itemIndex]; // Ensure items is defined and accessible
-                if (this.entity._coins >= item.price) {
-                    // Deduct coins from Faune if they have enough
-                    this.entity._coins -= item.price;
-                    //console.log(`${this.faune.playerName} bought ${item.name} for $${item.price}. Remaining coins: ${this.faune._coins}`);
-                    // Display confirmation message
-                    this.scene.add.text(this.scene.cameras.main.centerX, this.scene.cameras.main.centerY, `Purchased ${item.name}!`, { fontSize: '24px', color: '#00ff00' }).setOrigin(0.5);
-                } else {
-                    //console.log(`${this.faune.playerName} does not have enough coins to buy ${item.name}.`);
-                    // Display insufficient funds message if needed
-                    this.scene.add.text(this.scene.cameras.main.centerX, this.scene.cameras.main.centerY, `Not enough coins!`, { fontSize: '24px', color: '#ff0000' }).setOrigin(0.5);
-                }
+        if (this.entity && this.selectedIdx !== -1) { // Check if an item is selected
+            const item = this.items[this.selectedIdx]; // Get item using stored index
+            if (this.entity._coins >= item.price) {
+                // Deduct coins from Entity if they have enough
+                this.entity._coins -= item.price;
+                //console.log(`${this.entity.playerName} bought ${item.name} for $${item.price}. Remaining coins: ${this.entity._coins}`);
+                // Display confirmation message
+                this.scene.add.text(this.scene.cameras.main.centerX, this.scene.cameras.main.centerY, `Purchased ${item.name}!`, { fontSize: '24px', color: '#00ff00' }).setOrigin(0.5);
+            } else {
+                //console.log(`${this.entity.playerName} does not have enough coins to buy ${item.name}.`);
+                // Display insufficient funds message if needed
+                this.scene.add.text(this.scene.cameras.main.centerX, this.scene.cameras.main.centerY, `Not enough coins!`, { fontSize: '24px', color: '#ff0000' }).setOrigin(0.5);
             }
         }
 
