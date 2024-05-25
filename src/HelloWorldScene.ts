@@ -7,6 +7,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('ui-heart-full', 'ui/ui_heart_full.png')
+		this.load.image('knife', 'weapons/weapon_knife.png')
 		// this.load.setBaseURL('https://labs.phaser.io')
 
 		// this.load.image('sky', 'assets/skies/space3.png')
@@ -17,7 +18,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 	create() {
 		this.add.image(400, 300, 'ui-heart-full')
 
-		const particles = this.add.particles('ui-heart-full')
+		const particles = this.add.particles('knife')
 
 		const emitter = particles.createEmitter({
 			speed: 100,
