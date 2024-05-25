@@ -91,6 +91,10 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 		}
 	}
 
+	updatePosition(x: number, y: number) {
+        this.setPosition(x, y);
+    }
+
 	private throwKnife()
 	{
 		if (!this.knives)

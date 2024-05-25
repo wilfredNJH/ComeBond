@@ -103,6 +103,12 @@ export default class Server extends Phaser.Scene
                     // console.log('testing' + this.otherPlayers[sessionId].x)  
                     this.otherPlayers[sessionId].x = x 
                     this.otherPlayers[sessionId].y = y  
+                    // this.otherPlayers[sessionId].x = x 
+                    // this.otherPlayers[sessionId].y = y 
+
+                    if (this.otherPlayers[sessionId]) {
+                        this.otherPlayers[sessionId].updatePosition(x, y);
+                    }
                 }
             });
               
