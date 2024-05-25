@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
 
-import Preloader from './scenes/Preloader'
-import Game from './scenes/Game'
-import GameUI from './scenes/GameUI'
+import Preloader from './client/scenes/Preloader'
+import Game from './client/scenes/Game'
+import GameUI from './client/scenes/GameUI'
 
 const config = {
 	type: Phaser.AUTO,
