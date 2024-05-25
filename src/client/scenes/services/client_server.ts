@@ -100,15 +100,8 @@ export default class Server extends Phaser.Scene
                     console.log("Received othermove message from session ID " + sessionId + " with position x: " + x + ", y: " + y);
                     
                     // update the corresponding player's position 
-                    // console.log('testing' + this.otherPlayers[sessionId].x)  
-                    this.otherPlayers[sessionId].x = x 
-                    this.otherPlayers[sessionId].y = y  
-                    // this.otherPlayers[sessionId].x = x 
-                    // this.otherPlayers[sessionId].y = y 
+                    this.otherPlayers[sessionId].setPosition(x, y)
 
-                    if (this.otherPlayers[sessionId]) {
-                        this.otherPlayers[sessionId].updatePosition(x, y);
-                    }
                 }
             });
               

@@ -168,8 +168,7 @@ export default class Game extends Phaser.Scene
 			this.faune.update(this.cursors);
 			console.log("update" +this.server.sessionID);
 
-			if(this.messageBoxTest[this.server.sessionID]){
-				console.log("update")
+			if(this.server.sessionID){
 				this.updateMessageBoxPosition(this.server,this.server.sessionID);
 			}
 		}
