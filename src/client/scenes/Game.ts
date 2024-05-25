@@ -159,8 +159,9 @@ export default class Game extends Phaser.Scene
 		// this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.entity, this.handlePlayerLizardCollision, undefined, this)
   		this.bulletinPopup = new Popup(this);// Event listener for point changes
 		  this.registry.events.on('points-changed', (points) => {
-			  console.log(`Points changed: ${points}`);
-			  this.playerPoints = points;
+			  this.entity._coins += 50;
+			  console.log(`coins changed: ${this.entity._coins}`);
+			  sceneEvents.emit('player-coins-changed', this.entity._coins)
 			  // Update UI or any other logic based on points
 		  });
 

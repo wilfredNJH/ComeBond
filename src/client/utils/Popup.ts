@@ -87,28 +87,28 @@ class Popup {
         this.signUpContainer = scene.add.container(boxX, boxY, [this.signUpBackground, this.signUpText, this.signUpConfirmButton, this.signUpCloseButton]);
         this.signUpContainer.setVisible(false);
         this.signUpContainer.setDepth(1001); // Ensure it's in front of other objects
- // Create sign-up form elements
- this.signUpForm = scene.add.container(0, 0);
- this.nameInput = scene.add.dom(boxX - 60, boxY - 30).createFromHTML(`<input type="text" placeholder="Name" style="width: 200px;">`);
- this.emailInput = scene.add.dom(boxX - 60, boxY + 0).createFromHTML(`<input type="email" placeholder="Email" style="width: 200px;">`);
- this.phoneInput = scene.add.dom(boxX - 60, boxY + 30).createFromHTML(`<input type="text" placeholder="Phone" style="width: 200px;">`);
- this.signUpConfirmBtn = scene.add.text(boxX, boxY + 60, 'Confirm Sign-Up', {
-	 fontSize: '16px',
-	 color: '#00ff00',
-	 backgroundColor: '#000000',
-	 padding: { left: 10, right: 10, top: 5, bottom: 5 }
+        // Create sign-up form elements
+        this.signUpForm = scene.add.container(0, 0);
+        this.nameInput = scene.add.dom(boxX - 60, boxY - 30).createFromHTML(`<input type="text" placeholder="Name" style="width: 200px;">`);
+        this.emailInput = scene.add.dom(boxX - 60, boxY + 0).createFromHTML(`<input type="email" placeholder="Email" style="width: 200px;">`);
+        this.phoneInput = scene.add.dom(boxX - 60, boxY + 30).createFromHTML(`<input type="text" placeholder="Phone" style="width: 200px;">`);
+        this.signUpConfirmBtn = scene.add.text(boxX, boxY + 60, 'Confirm Sign-Up', {
+        fontSize: '16px',
+        color: '#00ff00',
+        backgroundColor: '#000000',
+        padding: { left: 10, right: 10, top: 5, bottom: 5 }
  })
 	 .setOrigin(0.5)
 	 .setInteractive()
 	 .on('pointerdown', () => {
 		 this.confirmSignUp();
 	 });
- this.signUpSuccessText = scene.add.text(boxX, boxY + 100, '', {
-	 fontSize: '14px',
-	 color: '#00ff00',
-	 align: 'center',
-	 wordWrap: { width: 280, useAdvancedWrap: true }
- })
+    this.signUpSuccessText = scene.add.text(boxX, boxY + 100, '', {
+        fontSize: '14px',
+        color: '#00ff00',
+        align: 'center',
+        wordWrap: { width: 280, useAdvancedWrap: true }
+    })
 	 .setOrigin(0.5);
 
  this.signUpForm.add([this.nameInput, this.emailInput, this.phoneInput, this.signUpConfirmBtn, this.signUpSuccessText]);
@@ -135,7 +135,7 @@ class Popup {
             const text = `${item.date} | ${item.event}`;
             const textObject = this.scene.add.text(0, yOffset, text, {
                 fontSize: '14px',
-                color: '#00ff00',
+                color: '#ffffff',
                 align: 'center',
                 wordWrap: { width: 480, useAdvancedWrap: true }
             });
@@ -200,6 +200,7 @@ class Popup {
         if (name && email && phone) {
             // Perform signup logic here (e.g., send data to server, update UI, etc.)
             this.signUpSuccessText.setText('Sign-up successful!');
+            console.log('signup success')
             this.resetSignUpForm();
         } else {
             this.signUpSuccessText.setText('Please fill out all fields.');
