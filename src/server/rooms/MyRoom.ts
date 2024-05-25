@@ -26,6 +26,18 @@ export class MyRoom extends Room<MyRoomState> {
       });
     });
 
+    this.onMessage("stop_move", (client, message) => {
+      // broadcast to all other players my position 
+      this.broadcast('keyup_event', {
+        sessionId: client.sessionId,
+        x: message.x,
+        y: message.y
+      }, {
+        except: client
+      });
+    });
+
+
     this.onMessage("chat", (client, message) => {
       console.log(`Chat from ${client.sessionId}: ${message}`);
       //this.state.messages.push(`${client.sessionId}: ${message}`);

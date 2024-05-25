@@ -18,7 +18,7 @@ export default class Game extends Phaser.Scene
 {
 
 	private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
-	private faune!: Faune
+	public faune!: Faune
 
 	private knives!: Phaser.Physics.Arcade.Group
 	private lizards!: Phaser.Physics.Arcade.Group
@@ -169,6 +169,7 @@ export default class Game extends Phaser.Scene
 			if(this.messageBoxTest[this.server.sessionID]){
 				this.updateMessageBoxPosition(this.server,this.server.sessionID);
 			}
+
 			// else if(this.messageBoxTest[])
 		}
 	}

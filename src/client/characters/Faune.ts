@@ -174,10 +174,10 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 			return
 		}
 
-		if (!movementCode)
-		{
-			return
-		}
+		// if (!movementCode)
+		// {
+		// 	return
+		// }
 
 		// if (Phaser.Input.Keyboard.JustDown(cursors.space!))
 		// {
@@ -195,7 +195,7 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 		// 	return
 		// }
 
-		const speed = 100
+		const speed = 10
 
 		if (!this.isLizard) {
 			if (movementCode === 1) {
@@ -221,6 +221,7 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 				this.setVelocity(0, speed)
 			}
 			else {
+
 				const parts = this.anims.currentAnim.key.split('-')
 				parts[1] = 'idle'
 				this.anims.play(parts.join('-'))
