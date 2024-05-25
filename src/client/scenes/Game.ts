@@ -44,15 +44,22 @@ export default class Game extends Phaser.Scene
 
     async create()
     {
-		// const room = await this.client.joinOrCreate('my_room')
-		// console.log(room.name)
+		const room = await this.client.joinOrCreate('my_room')
+		console.log(room.name)
 
 		// TODO: remove TEST 
-		this.client.joinOrCreate("my_room").then(room => {
-			console.log(room.sessionId, "joined", room.name);
-		}).catch(e => {
-			console.log("JOIN ERROR", e);
-		});
+		// const room = this.client.joinOrCreate("my_room").then(room => {
+		// 	console.log(room.sessionId, "joined", room.name);
+		// }).catch(e => {
+		// 	console.log("JOIN ERROR", e);
+		// });
+		room.onMessage('keydown', (message) => {
+			console.log(message)
+		})
+
+		this.input.keyboard.on('keydown', (evt: KeyboardEvent) => {
+			room.send('keydown', evt.key)
+		})
 
 		this.scene.run('game-ui')
 
