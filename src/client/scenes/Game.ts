@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 
-import * as Colyseus from "colyseus.js" // not necessary if included via <script> tag.
+import * as Colyseus from "colyseus.js" // not necessary if included via <script> tag. // TODO: remove TEST 
 
 import { debugDraw } from '../utils/debug'
 import { createLizardAnims } from '../anims/EnemyAnims'
@@ -33,7 +33,7 @@ export default class Game extends Phaser.Scene
 	}
 
 	init(){
-		this.client = new Colyseus.Client('ws://localhost:2567')
+		this.client = new Colyseus.Client('ws://localhost:2567') // TODO: remove TEST 
 		console.log('new client')
 	}
 
@@ -47,6 +47,7 @@ export default class Game extends Phaser.Scene
 		// const room = await this.client.joinOrCreate('my_room')
 		// console.log(room.name)
 
+		// TODO: remove TEST 
 		this.client.joinOrCreate("my_room").then(room => {
 			console.log(room.sessionId, "joined", room.name);
 		}).catch(e => {
