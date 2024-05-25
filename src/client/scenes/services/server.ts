@@ -40,7 +40,7 @@ export default class Server extends Phaser.Scene
         this.client.joinOrCreate("my_room").then(room => {
             console.log("joined successfully", room);
             
-            // Handle player state updates
+            // // Handle player state updates
             room.state.players.onAdd = (player, sessionId) => {
                 this.addPlayer(sessionId, player);
                 console.log(`Player ${sessionId} added:`, player);
@@ -62,14 +62,13 @@ export default class Server extends Phaser.Scene
             // Send a move message
             document.addEventListener("keydown", (event) => {
                 const key = event.key;
-                let x = 0, y = 0;
+                let x = 0, y = 0; // TODO: get from current player's pos
 
                 if (key === "ArrowUp") y = -1;
                 if (key === "ArrowDown") y = 1;
                 if (key === "ArrowLeft") x = -1;
                 if (key === "ArrowRight") x = 1;
                 
-                console.log('movinggggg')
                 room.send("move", { x, y });
             });
             }).catch(e => {
