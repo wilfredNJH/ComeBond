@@ -31,6 +31,7 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 
 	private knives?: Phaser.Physics.Arcade.Group
 	private activeChest?: Chest
+	private isLizard = false;
 
 	get health()
 	{
@@ -40,7 +41,11 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 	constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number)
 	{
 		super(scene, x, y, texture, frame)
-
+		if(texture == "lizard")
+		{
+			this.isLizard = true;
+		}
+		else
 		this.anims.play('faune-idle-down')
 	}
 
@@ -197,44 +202,66 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 		const rightDown = cursors.right?.isDown
 		const upDown = cursors.up?.isDown
 		const downDown = cursors.down?.isDown
+		if (!this.isLizard) {
+			if (leftDown) {
+				this.anims.play('faune-run-side', true)
+				this.setVelocity(-speed, 0)
 
-		if (leftDown)
-		{
-			this.anims.play('faune-run-side', true)
-			this.setVelocity(-speed, 0)
+				this.scaleX = -1
+				this.body.offset.x = 24
+			}
+			else if (rightDown) {
+				this.anims.play('faune-run-side', true)
+				this.setVelocity(speed, 0)
 
-			this.scaleX = -1
-			this.body.offset.x = 24
-		}
-		else if (rightDown)
-		{
-			this.anims.play('faune-run-side', true)
-			this.setVelocity(speed, 0)
+				this.scaleX = 1
+				this.body.offset.x = 8
+			}
+			else if (upDown) {
+				this.anims.play('faune-run-up', true)
+				this.setVelocity(0, -speed)
+			}
+			else if (downDown) {
+				this.anims.play('faune-run-down', true)
+				this.setVelocity(0, speed)
+			}
+			else {
+				const parts = this.anims.currentAnim.key.split('-')
+				parts[1] = 'idle'
+				this.anims.play(parts.join('-'))
+				this.setVelocity(0, 0)
+			}
 
-			this.scaleX = 1
-			this.body.offset.x = 8
-		}
-		else if (upDown)
-		{
-			this.anims.play('faune-run-up', true)
-			this.setVelocity(0, -speed)
-		}
-		else if (downDown)
-		{
-			this.anims.play('faune-run-down', true)
-			this.setVelocity(0, speed)
+			if (leftDown || rightDown || upDown || downDown) {
+				this.activeChest = undefined
+			}
 		}
 		else
 		{
-			const parts = this.anims.currentAnim.key.split('-')
-			parts[1] = 'idle'
-			this.anims.play(parts.join('-'))
-			this.setVelocity(0, 0)
-		}
+			if (leftDown) {
+				this.setVelocity(-speed, 0)
 
-		if (leftDown || rightDown || upDown || downDown)
-		{
-			this.activeChest = undefined
+				this.scaleX = -1
+				this.body.offset.x = 24
+			}
+			else if (rightDown) {
+				this.setVelocity(speed, 0)
+
+				this.scaleX = 1
+				this.body.offset.x = 8
+			}
+			else if (upDown) {
+				this.setVelocity(0, -speed)
+			}
+			else if (downDown) {
+				this.setVelocity(0, speed)
+			}
+			else {
+			}
+
+			if (leftDown || rightDown || upDown || downDown) {
+				this.activeChest = undefined
+			}
 		}
 	}
 }

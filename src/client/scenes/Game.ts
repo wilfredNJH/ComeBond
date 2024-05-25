@@ -26,6 +26,10 @@ export default class Game extends Phaser.Scene
 	private playerLizardsCollider?: Phaser.Physics.Arcade.Collider
     public messageBoxTest: { [key: string]: Phaser.GameObjects.Container } = {};
 	public server!: Server;
+
+  private playerName!: string
+  private selectedSpriteIndex!: number
+
 	constructor()
 	{
 		super('game')
@@ -36,7 +40,14 @@ export default class Game extends Phaser.Scene
 		this.cursors = this.input.keyboard.createCursorKeys()
     }
 
-    async create(data: { server: Server })
+    init(data: { playerName: string, selectedSprite: number, server: Server }) {
+      this.playerName = data.playerName
+      this.selectedSpriteIndex = data.selectedSprite
+      this.server = data.server
+
+  }
+
+    async create()
     {
 		/***************
 		 * SERVER START 
@@ -46,6 +57,8 @@ export default class Game extends Phaser.Scene
 		server.join() 
 		this.messageBoxTest = server.messageBox;
 		server.passGameScene(this)
+
+		this.server.passGameScene(this)
 
 		this.scene.run('game-ui')
 
@@ -63,7 +76,15 @@ export default class Game extends Phaser.Scene
 			maxSize: 3
 		})
 
-		this.faune = this.add.faune(128, 128, 'faune')
+      if (this.selectedSpriteIndex == 0) {
+        console.log("FAUNE");
+        this.faune = this.add.faune(128, 128, 'faune')
+      }
+      else {
+        console.log("LIZARD");
+
+        this.faune = this.add.faune(128, 128, 'lizard')
+      }
 		this.faune.setKnives(this.knives)
 
 		const wallsLayer = map.createStaticLayer('Walls', tileset)

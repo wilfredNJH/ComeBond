@@ -29,10 +29,7 @@ export default class Preloader extends Phaser.Scene
 
 	create()
 	{
-
-		this.load.image('knife2', 'weapons/weapon_knife.png')
-
-		this.scene.start('game',{
+		this.scene.start('start-screen',{
 			server: this.server // pass this data object to the other scene 
 		})
 	}
