@@ -99,6 +99,10 @@ export default class Server extends Phaser.Scene
                     
                     // update the corresponding player's position 
                     this.otherPlayers[sessionId].setPosition(x, y)
+
+                    if(this.otherPlayers[sessionId]){
+                        this.otherPlayers[sessionId].alt_update(1) // TODO: change this
+                    }
                 }
             });
               
@@ -191,6 +195,7 @@ export default class Server extends Phaser.Scene
         console.log("created for " + playerId);
         return messageBox;
     }
+    
     showMessage(message: string, playerID: string) {
         console.log("showed" + playerID);
         console.log("t"+this.mRoom.sessionId);
@@ -215,6 +220,11 @@ export default class Server extends Phaser.Scene
                 msgBox.setVisible(false);
             }, [], this);
         }
+    }
+
+    updatePlayers(){
+        // loop through all the players and update the position 
+        this.otherPlayers[this.sessionID]
     }
     
     // updatePlayer(sessionId: string, player: Player) {

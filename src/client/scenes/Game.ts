@@ -87,7 +87,6 @@ export default class Game extends Phaser.Scene
 		this.faune.setKnives(this.knives)
 
 
-
 		const chests = this.physics.add.staticGroup({
 			classType: Chest
 		})

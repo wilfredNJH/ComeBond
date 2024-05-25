@@ -166,6 +166,100 @@ export default class Faune extends Phaser.Physics.Arcade.Sprite
 		}
 	}
 
+	alt_update(movementCode){
+		if (this.healthState === HealthState.DAMAGE
+			|| this.healthState === HealthState.DEAD
+		)
+		{
+			return
+		}
+
+		if (!movementCode)
+		{
+			return
+		}
+
+		// if (Phaser.Input.Keyboard.JustDown(cursors.space!))
+		// {
+		// 	if (this.activeChest)
+		// 	{
+		// 		const coins = this.activeChest.open()
+		// 		this._coins += coins
+
+		// 		sceneEvents.emit('player-coins-changed', this._coins)
+		// 	}
+		// 	else
+		// 	{
+		// 		this.throwKnife()
+		// 	}
+		// 	return
+		// }
+
+		const speed = 100
+
+		if (!this.isLizard) {
+			if (movementCode === 1) {
+				this.anims.play('faune-run-side', true)
+				this.setVelocity(-speed, 0)
+
+				this.scaleX = -1
+				this.body.offset.x = 24
+			}
+			else if (movementCode === 2) {
+				this.anims.play('faune-run-side', true)
+				this.setVelocity(speed, 0)
+
+				this.scaleX = 1
+				this.body.offset.x = 8
+			}
+			else if (movementCode === 3) {
+				this.anims.play('faune-run-up', true)
+				this.setVelocity(0, -speed)
+			}
+			else if (movementCode === 4) {
+				this.anims.play('faune-run-down', true)
+				this.setVelocity(0, speed)
+			}
+			else {
+				const parts = this.anims.currentAnim.key.split('-')
+				parts[1] = 'idle'
+				this.anims.play(parts.join('-'))
+				this.setVelocity(0, 0)
+			}
+
+			// if (leftDown || rightDown || upDown || downDown) {
+			// 	this.activeChest = undefined
+			// }
+		}
+		else
+		{
+			if (movementCode === 1) {
+				this.setVelocity(-speed, 0)
+
+				this.scaleX = -1
+				this.body.offset.x = 24
+			}
+			else if (movementCode === 2) {
+				this.setVelocity(speed, 0)
+
+				this.scaleX = 1
+				this.body.offset.x = 8
+			}
+			else if (movementCode === 3) {
+				this.setVelocity(0, -speed)
+			}
+			else if (movementCode === 4) {
+				this.setVelocity(0, speed)
+			}
+			else {
+			}
+
+			// if (leftDown || rightDown || upDown || downDown) {
+			// 	this.activeChest = undefined
+			// }
+		}
+	}
+
 	update(cursors: Phaser.Types.Input.Keyboard.CursorKeys)
 	{
 		if (this.healthState === HealthState.DAMAGE
