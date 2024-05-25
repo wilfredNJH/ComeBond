@@ -1,10 +1,15 @@
 import Phaser from 'phaser'
+import Server from '../scenes/services/server'
 
 export default class Preloader extends Phaser.Scene
 {
+	// server instance 
+	private server!: Server
+
 	constructor()
 	{
 		super('preloader')
+		this.server = new Server()
 	}
 
 	preload()
@@ -24,6 +29,8 @@ export default class Preloader extends Phaser.Scene
 
 	create()
 	{
-		this.scene.start('game')
+		this.scene.start('game',{
+			server: this.server // pass this data object to the other scene 
+		})
 	}
 }

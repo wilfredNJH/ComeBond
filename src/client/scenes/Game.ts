@@ -1,7 +1,5 @@
 import Phaser from 'phaser'
 
-import * as Colyseus from "colyseus.js" // not necessary if included via <script> tag. // TODO: remove TEST 
-
 import { debugDraw } from '../utils/debug'
 import { createLizardAnims } from '../anims/EnemyAnims'
 import { createCharacterAnims } from '../anims/CharacterAnims'
@@ -14,10 +12,10 @@ import Faune from '../characters/Faune'
 
 import { sceneEvents } from '../events/EventsCenter'
 import Chest from '../items/Chest'
+import type Server from '../scenes/services/server'
 
 export default class Game extends Phaser.Scene
 {
-	private client!: Colyseus.Client
 
 	private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
 	private faune!: Faune
@@ -32,34 +30,18 @@ export default class Game extends Phaser.Scene
 		super('game')
 	}
 
-	init(){
-		this.client = new Colyseus.Client('ws://localhost:2567') // TODO: remove TEST 
-		console.log('new client')
-	}
-
 	preload()
     {
 		this.cursors = this.input.keyboard.createCursorKeys()
     }
 
-    async create()
+    async create(data: { server: Server })
     {
-		const room = await this.client.joinOrCreate('my_room')
-		console.log(room.name)
-
-		// TODO: remove TEST 
-		// const room = this.client.joinOrCreate("my_room").then(room => {
-		// 	console.log(room.sessionId, "joined", room.name);
-		// }).catch(e => {
-		// 	console.log("JOIN ERROR", e);
-		// });
-		room.onMessage('keydown', (message) => {
-			console.log(message)
-		})
-
-		this.input.keyboard.on('keydown', (evt: KeyboardEvent) => {
-			room.send('keydown', evt.key)
-		})
+		/***************
+		 * SERVER START 
+		***************/
+		const { server } = data
+		server.join() 
 
 		this.scene.run('game-ui')
 

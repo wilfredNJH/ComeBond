@@ -1,18 +1,14 @@
-import { Room, Client } from "colyseus";
+import { Room, Client, Server } from "colyseus";
 import { MyRoomState } from "./schema/MyRoomState";
 
 export class MyRoom extends Room<MyRoomState> {
 
+  private server!: Server
+
   onCreate (options: any) {
     this.setState(new MyRoomState());
 
-    // default example  
-    // this.onMessage("type", (client, message) => {
-    //   //
-    //   // handle "type" message
-    //   //
-    // });
-
+    // TODO: remove testing, handle keydown 
     this.onMessage("keydown", (client, message) => {
       this.broadcast('keydown', message, {
         except: client
