@@ -87,7 +87,6 @@ export default class Game extends Phaser.Scene
 		this.faune.setKnives(this.knives)
 
 
-
 		const chests = this.physics.add.staticGroup({
 			classType: Chest
 		})
@@ -166,10 +165,8 @@ export default class Game extends Phaser.Scene
 		if (this.faune)
 		{
 			this.faune.update(this.cursors);
-			console.log("update" +this.server.sessionID);
-
+			
 			if(this.messageBoxTest[this.server.sessionID]){
-				console.log("update")
 				this.updateMessageBoxPosition(this.server,this.server.sessionID);
 			}
 			// else if(this.messageBoxTest[])
