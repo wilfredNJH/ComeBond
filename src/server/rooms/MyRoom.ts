@@ -9,11 +9,11 @@ export class MyRoom extends Room<MyRoomState> {
     this.setState(new MyRoomState());
 
     // TODO: remove testing, handle keydown 
-    this.onMessage("keydown", (client, message) => {
-      this.broadcast('keydown', message, {
-        except: client
-      })
-    });
+    // this.onMessage("keydown", (client, message) => {
+    //   this.broadcast('keydown', message, {
+    //     except: client
+    //   })
+    // });
 
     /***************
     * Player States
@@ -21,6 +21,8 @@ export class MyRoom extends Room<MyRoomState> {
 
     this.onMessage("move", (client, message) => {
       // message is expected to be: { x: number, y: number }
+      console.log('asdasdasd')
+      console.log(client.sessionId + "pos x " + message.x + "pos y" + message.y)
       this.state.movePlayer(client.sessionId, message.x, message.y);
     });
 

@@ -1,9 +1,6 @@
 // CLIENT LOGIC FOR COMMUNICATING TO CLIENT SDK 
 import Phaser from 'phaser'
 
-import '../../characters/Faune'
-import Faune from '../../characters/Faune'
-
 // import { MyRoomState } from '../../../server/rooms/schema/MyRoomState'; // Import your state classes
 import * as Colyseus from "colyseus.js" // not necessary if included via <script> tag. // TODO: remove TEST 
 
@@ -16,8 +13,6 @@ export default class Server extends Phaser.Scene
 
 
     preload() {
-        // Load your assets here
-        this.load.image('knife2', 'ui_heart_empty.png');
     }
 
     constructor(){
@@ -47,19 +42,19 @@ export default class Server extends Phaser.Scene
             
             // Handle player state updates
             room.state.players.onAdd = (player, sessionId) => {
-                self.addPlayer(sessionId, player);
+                this.addPlayer(sessionId, player);
                 console.log(`Player ${sessionId} added:`, player);
             };
             
-            // room.state.players.onRemove = (player, sessionId) => {
-            //     this.removePlayer(sessionId);
-            //     console.log(`Player ${sessionId} removed:`, player);
-            // };
+            room.state.players.onRemove = (player, sessionId) => {
+                this.removePlayer(sessionId);
+                console.log(`Player ${sessionId} removed:`, player);
+            };
             
-            // room.state.players.onChange = (player, sessionId) => {
-            //     this.updatePlayer(sessionId, player);
-            //     console.log(`Player ${sessionId} changed:`, player);
-            // };
+            room.state.players.onChange = (player, sessionId) => {
+                this.updatePlayer(sessionId, player);
+                console.log(`Player ${sessionId} changed:`, player);
+            };
             
             // Send a join message
             room.send("join");
@@ -74,6 +69,7 @@ export default class Server extends Phaser.Scene
                 if (key === "ArrowLeft") x = -1;
                 if (key === "ArrowRight") x = 1;
                 
+                console.log('movinggggg')
                 room.send("move", { x, y });
             });
             }).catch(e => {
@@ -86,8 +82,8 @@ export default class Server extends Phaser.Scene
         // Add player sprite
         // const sprite = this.add.faune(128, 128, 'faune'); 
         console.log('added player ' + sessionId + ' ' + player.x + ' ' + player.y)
-        const sprite = this.add.sprite(player.x, player.y, 'knife2');
-        this.playerSprites[sessionId] = sprite;
+        // const sprite = this.add.sprite(player.x, player.y, 'knife2');
+        // this.playerSprites[sessionId] = sprite;
     }
 
     removePlayer(sessionId: string) {
