@@ -220,6 +220,13 @@ export default class Game extends Phaser.Scene
     }
 
 
+	private updateOtherMessageBoxPosition(server:Server, playerID: string ) {
+		if(this.messageBoxTest[playerID])
+			{
+				console.log("read here")
+		this.messageBoxTest[playerID].setPosition(this.server.otherPlayers[playerID].x, this.server.otherPlayers[playerID].y - this.server.otherPlayers[playerID].height - 20);
+		}
+	}
 	update(t: number, dt: number)
 	{
 		if (this.entity)
@@ -229,6 +236,12 @@ export default class Game extends Phaser.Scene
 			if(this.messageBoxTest[this.server.sessionID]){
 				this.updateMessageBoxPosition(this.server,this.server.sessionID);
 			}
+			
+			for (let i = 0; i < this.server.otherPlayerList.length; i++) {
+				console.log("testmsg "+this.server.otherPlayerList[i])
+				this.updateOtherMessageBoxPosition(this.server,this.server.otherPlayerList[i]);
+			}
+			// else if(this.messageBoxTest[])
 		}
 		
         // Update popup position based on player's position
