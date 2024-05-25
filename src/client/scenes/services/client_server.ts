@@ -11,7 +11,7 @@ export default class Server extends Phaser.Scene
 {
     private client!: Colyseus.Client
     private mRoom!: any
-    private otherPlayers: { [key: string]: Faune } = {};
+    public otherPlayers: { [key: string]: Faune } = {};
     private gameScene!: Phaser.Scene
 
     private chatInput!: HTMLInputElement;
@@ -49,6 +49,7 @@ export default class Server extends Phaser.Scene
             // Handle player state updates
             this.mRoom.state.players.onAdd = (player, sessionId) => {
                 this.addPlayer(sessionId, player.x, player.y);
+                console.log(player.healthState)
                 console.log("add");
                 this.createMessageBox(sessionId,player);
             };
@@ -141,9 +142,8 @@ export default class Server extends Phaser.Scene
         });
     }
 
-    passGameScene(pGameScene: any, mwallslayer: any){
+    passGameScene(pGameScene: any){
         this.gameScene = pGameScene
-        this.wallslayer = mwallslayer;
     }
 
     addPlayer(sessionId: string, posX: number, posY: number) {

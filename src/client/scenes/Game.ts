@@ -172,6 +172,7 @@ export default class Game extends Phaser.Scene
 				console.log("update")
 				this.updateMessageBoxPosition(this.server,this.server.sessionID);
 			}
+			// else if(this.messageBoxTest[])
 		}
 	}
 }
