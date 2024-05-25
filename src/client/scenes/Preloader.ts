@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import Server from '../scenes/services/server'
+import Server from './services/client_server'
 
 export default class Preloader extends Phaser.Scene
 {

@@ -4,13 +4,16 @@ import Phaser from 'phaser'
 // import { MyRoomState } from '../../../server/rooms/schema/MyRoomState'; // Import your state classes
 import * as Colyseus from "colyseus.js" // not necessary if included via <script> tag. // TODO: remove TEST 
 import Faune from '~/client/characters/Faune';
+import { Room } from 'colyseus';
 
 
 export default class Server extends Phaser.Scene
 {
     private client!: Colyseus.Client
+    private mRoom!: any
     private otherPlayers: { [key: string]: Faune } = {};
     private gameScene!: Phaser.Scene
+
 
     preload() {
     }
@@ -36,11 +39,12 @@ export default class Server extends Phaser.Scene
 
         this.client.joinOrCreate("my_room").then(room => {
             console.log("joined successfully", room);
+
+            this.mRoom = room
             
             // Handle player state updates
-            room.state.players.onAdd = (player, sessionId) => {
-                // console.log('player' + player)
-                this.addPlayer(sessionId);
+            this.mRoom.state.players.onAdd = (player, sessionId) => {
+                this.addPlayer(sessionId, player.x, player.y);
             };
             
             // room.state.players.onRemove = (player, sessionId) => {
@@ -54,15 +58,10 @@ export default class Server extends Phaser.Scene
             // };
             
             // Send a join message
-            room.send("join");
-
-            // Some other player joined 
-            // room.onMessage('newplayer', (sessionId) => {
-            //     this.addPlayer(sessionId);
-            // })
+            this.mRoom.send("join");
 
             // Some other player moved 
-            room.onMessage('*', (type, message) => {
+            this.mRoom.onMessage('*', (type, message) => {
                 if (type === 'othermove') {
                     console.log('ENTERED HERE')
                     // Do something with the received data
@@ -83,7 +82,7 @@ export default class Server extends Phaser.Scene
                 const key = event.key;
 
                 // Get current player's position from the game state
-                const currentPlayer = room.state.players[room.sessionId];
+                const currentPlayer = this.mRoom.state.players[this.mRoom.sessionId];
                 // TODO : need to fix this 
                 if (currentPlayer) {
                     if (key === "ArrowUp") currentPlayer.y += -1;
@@ -93,7 +92,7 @@ export default class Server extends Phaser.Scene
                     
                     let x = currentPlayer.x 
                     let y = currentPlayer.y
-                    room.send("move", { x, y });
+                    this.mRoom.send("move", { x, y });
                 }
 
             });
@@ -106,18 +105,20 @@ export default class Server extends Phaser.Scene
         this.gameScene = pGameScene
     }
 
-    addPlayer(sessionId: string) {
-        console.log('CREATED OTHER PLAYER' + sessionId)
-        this.otherPlayers[sessionId] = this.gameScene.add.faune(128, 128, 'faune')
+    addPlayer(sessionId: string, posX: number, posY: number) {
+        if(this.mRoom.sessionId != sessionId){
+            console.log('CREATED OTHER PLAYER' + sessionId + 'current ID' + this.mRoom.sessionId)
+            this.otherPlayers[sessionId] = this.gameScene.add.faune(posX, posY, 'faune')
+        }
     }
 
-    // removePlayer(sessionId: string) {
-    //     // Remove player sprite
-    //     if (this.playerSprites[sessionId]) {
-    //         this.playerSprites[sessionId].destroy();
-    //         delete this.playerSprites[sessionId];
-    //     }
-    // }
+    removePlayer(sessionId: string) {
+        // Remove player sprite
+        if (this.playerSprites[sessionId]) {
+            this.playerSprites[sessionId].destroy();
+            delete this.playerSprites[sessionId];
+        }
+    }
 
     // updatePlayer(sessionId: string, player: Player) {
     //     // Update player sprite position

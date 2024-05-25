@@ -12,7 +12,7 @@ import Faune from '../characters/Faune'
 
 import { sceneEvents } from '../events/EventsCenter'
 import Chest from '../items/Chest'
-import type Server from '../scenes/services/server'
+import type Server from './services/client_server'
 
 export default class Game extends Phaser.Scene
 {
