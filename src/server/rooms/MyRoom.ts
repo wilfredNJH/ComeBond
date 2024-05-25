@@ -15,6 +15,15 @@ export class MyRoom extends Room<MyRoomState> {
       // message is expected to be: { x: number, y: number }
       console.log(client.sessionId + "pos x " + message.x + "pos y" + message.y)
       this.state.movePlayer(client.sessionId, message.x, message.y);
+
+      // broadcast to all other players my position 
+      this.broadcast('othermove', {
+        sessionId: client.sessionId,
+        x: message.x,
+        y: message.y
+      }, {
+        except: client
+      });
     });
 
     // Handle player joining

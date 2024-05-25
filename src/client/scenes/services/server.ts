@@ -9,8 +9,7 @@ import Faune from '~/client/characters/Faune';
 export default class Server extends Phaser.Scene
 {
     private client!: Colyseus.Client
-    // private playerSprites: { [key: string]: Phaser.GameObjects.Sprite } = {};
-    private playerSprites: { [key: string]: Faune } = {};
+    private otherPlayers: { [key: string]: Faune } = {};
     private gameScene!: Phaser.Scene
 
     preload() {
@@ -26,9 +25,6 @@ export default class Server extends Phaser.Scene
 
     async join(){
 
-        // const room = await this.client.joinOrCreate('my_room')
-		// console.log(room.name)
-        
         // // input sending to the server 
         // room.onMessage('keydown', (message) => {
 		// 	console.log(message)
@@ -42,11 +38,10 @@ export default class Server extends Phaser.Scene
             console.log("joined successfully", room);
             
             // Handle player state updates
-            // room.state.players.onAdd = (player, sessionId) => {
-            //     console.log('new player has joineeddd!!!!!')
-            //     this.addPlayer(sessionId, player);
-            //     console.log(`Player ${sessionId} added:`, player);
-            // };
+            room.state.players.onAdd = (player, sessionId) => {
+                // console.log('player' + player)
+                this.addPlayer(sessionId);
+            };
             
             // room.state.players.onRemove = (player, sessionId) => {
             //     this.removePlayer(sessionId);
@@ -55,19 +50,33 @@ export default class Server extends Phaser.Scene
             
             // room.state.players.onChange = (player, sessionId) => {
             //     this.updatePlayer(sessionId, player);
-            //     console.log(`Player ${sessionId} changed:`, player);
+            //     console.log(`TEST TEST Player ${sessionId} changed:`, player);
             // };
             
             // Send a join message
             room.send("join");
 
             // Some other player joined 
-            room.onMessage('newplayer', (sessionId) => {
-                console.log('new player' + sessionId + 'has joined the room')
-                console.log(this.add)
-                this.playerSprites[sessionId] = this.gameScene.add.faune(128, 128, 'faune')
+            // room.onMessage('newplayer', (sessionId) => {
+            //     this.addPlayer(sessionId);
+            // })
 
-            })
+            // Some other player moved 
+            room.onMessage('*', (type, message) => {
+                if (type === 'othermove') {
+                    console.log('ENTERED HERE')
+                    // Do something with the received data
+                    const { sessionId, x, y } = message;
+                    console.log("Received othermove message from session ID " + sessionId + " with position x: " + x + ", y: " + y);
+                    
+                    // update the corresponding player's position 
+                    // console.log('testing' + this.otherPlayers[sessionId].x)  
+                    this.otherPlayers[sessionId].x = x 
+                    this.otherPlayers[sessionId].y = y  
+                }
+            });
+              
+              
             
             // Send a move message
             document.addEventListener("keydown", (event) => {
@@ -96,13 +105,10 @@ export default class Server extends Phaser.Scene
     passGameScene(pGameScene: any){
         this.gameScene = pGameScene
     }
-    
-    addPlayer(sessionId: string, player: Player) {
-        // Add player sprite
-        // const sprite = this.add.faune(128, 128, 'faune'); 
-        console.log('added player ' + sessionId + ' ' + player.x + ' ' + player.y)
-        // const sprite = this.add.sprite(player.x, player.y, 'knife2');
-        // this.playerSprites[sessionId] = sprite;
+
+    addPlayer(sessionId: string) {
+        console.log('CREATED OTHER PLAYER' + sessionId)
+        this.otherPlayers[sessionId] = this.gameScene.add.faune(128, 128, 'faune')
     }
 
     // removePlayer(sessionId: string) {
@@ -115,7 +121,7 @@ export default class Server extends Phaser.Scene
 
     // updatePlayer(sessionId: string, player: Player) {
     //     // Update player sprite position
-    //     const sprite = this.playerSprites[sessionId];
+    //     const sprite = this.otherPlayers[sessionId];
     //     if (sprite) {
     //         sprite.x = player.x;
     //         sprite.y = player.y;
