@@ -13,6 +13,10 @@ import Faune from '../characters/Faune'
 import { sceneEvents } from '../events/EventsCenter'
 import Chest from '../items/Chest'
 import Server from './services/client_server'
+import Bulletin from '../items/Bulletin'
+import { createBulletinAnims } from '../anims/BulletinAnims'
+
+import Popup from '../utils/Popup'; // Import the Popup class
 
 export default class Game extends Phaser.Scene
 {
@@ -22,16 +26,19 @@ export default class Game extends Phaser.Scene
 
 	private knives!: Phaser.Physics.Arcade.Group
 	private lizards!: Phaser.Physics.Arcade.Group
-
 	private playerLizardsCollider?: Phaser.Physics.Arcade.Collider
     public messageBoxTest: { [key: string]: Phaser.GameObjects.Container } = {};
 	public server!: Server;
 
-  private playerName!: string
-  private selectedSpriteIndex!: number
-  private server!: Server
-  private backgroundMusic?: Phaser.Sound.BaseSound
+	private playerName!: string
+	private selectedSpriteIndex!: number
+	private backgroundMusic?: Phaser.Sound.BaseSound
 
+	
+	private bulletinPopup!: Popup; // Add a property for the Popup
+	private bulletins!: Phaser.Physics.Arcade.StaticGroup
+
+    private playerPoints: number = 0;
 
 	constructor()
 	{
@@ -41,6 +48,7 @@ export default class Game extends Phaser.Scene
 	preload()
     {
 		this.cursors = this.input.keyboard.createCursorKeys()
+		
     }
 
     init(data: { playerName: string, selectedSprite: number, server: Server }) {
@@ -69,9 +77,12 @@ export default class Game extends Phaser.Scene
 		createCharacterAnims(this.anims)
 		createLizardAnims(this.anims)
 		createChestAnims(this.anims)
+		createBulletinAnims(this.anims)
+
 		const map = this.make.tilemap({ key: 'dungeon' })
 		const tileset = map.addTilesetImage('dungeon', 'tiles', 16, 16, 1, 2)
-
+        
+		const groundLayer = map.createStaticLayer('Ground', tileset)
 		const wallsLayer = map.createStaticLayer('Walls', tileset)
 
 		wallsLayer.setCollisionByProperty({ collides: true })
@@ -94,6 +105,7 @@ export default class Game extends Phaser.Scene
 		this.faune.setKnives(this.knives)
 
 		this.server.passGameScene(this, this.faune)
+		this.cameras.main.startFollow(this.faune, true)
 
 		const chests = this.physics.add.staticGroup({
 			classType: Chest
@@ -118,6 +130,17 @@ export default class Game extends Phaser.Scene
 			this.lizards.get(lizObj.x! + lizObj.width! * 0.5, lizObj.y! - lizObj.height! * 0.5, 'lizard')
 		})
 
+		// Create bulletins
+		this.bulletins = this.physics.add.staticGroup({
+            classType: Bulletin
+        })
+        const bulletinsLayer = map.getObjectLayer('Bulletins')
+        bulletinsLayer.objects.forEach(bulletinObj => {
+           // this.bulletins.get(bulletinObj.x! + bulletinObj.width! * 0.5, bulletinObj.y! - bulletinObj.height! * 0.5, 'bulletin')
+		   const bulletin = this.bulletins.get(bulletinObj.x! + bulletinObj.width! * 0.5, bulletinObj.y! - bulletinObj.height! * 0.5, 'bulletin');
+		   bulletin.setScale(1);
+		 })
+
 		this.physics.add.collider(this.faune, wallsLayer)
 		this.physics.add.collider(this.lizards, wallsLayer)
 
@@ -125,8 +148,17 @@ export default class Game extends Phaser.Scene
 
 		this.physics.add.collider(this.knives, wallsLayer, this.handleKnifeWallCollision, undefined, this)
 		this.physics.add.collider(this.knives, this.lizards, this.handleKnifeLizardCollision, undefined, this)
+		this.physics.add.collider(this.faune, this.bulletins, this.handlePlayerBulletinCollision, undefined, this);
 
 		this.playerLizardsCollider = this.physics.add.collider(this.lizards, this.faune, this.handlePlayerLizardCollision, undefined, this)
+  		this.bulletinPopup = new Popup(this);// Event listener for point changes
+		  this.registry.events.on('points-changed', (points) => {
+			  console.log(`Points changed: ${points}`);
+			  this.playerPoints = points;
+			  // Update UI or any other logic based on points
+		  });
+
+		
 	}
 
 	private handlePlayerChestCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
@@ -168,6 +200,15 @@ export default class Game extends Phaser.Scene
 			this.messageBoxTest[playerID].setPosition(this.faune.x, this.faune.y - this.faune.height - 20);
 		}
 	
+
+	private handlePlayerBulletinCollision(obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject)
+    {
+        const bulletin = obj2 as Bulletin
+		console.log('Player collided with bulletin'); // Debug statement
+    	this.bulletinPopup.showVolunteeringOpportunities();
+    }
+
+
 	update(t: number, dt: number)
 	{
 		if (this.faune)
@@ -178,5 +219,9 @@ export default class Game extends Phaser.Scene
 				this.updateMessageBoxPosition(this.server,this.server.sessionID);
 			}
 		}
+		
+        // Update popup position based on player's position
+        this.bulletinPopup.update(this.faune.x, this.faune.y);
+
 	}
 }
