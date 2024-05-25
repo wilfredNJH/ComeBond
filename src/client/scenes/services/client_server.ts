@@ -13,7 +13,6 @@ export default class Server extends Phaser.Scene
     private mRoom!: any
     private otherPlayers: { [key: string]: Faune } = {};
     private gameScene!: Phaser.Scene
-    private wallslayer !: any;
 
     private chatInput!: HTMLInputElement;
     private isChatting: boolean = false;
@@ -50,7 +49,7 @@ export default class Server extends Phaser.Scene
             // Handle player state updates
             this.mRoom.state.players.onAdd = (player, sessionId) => {
                 this.addPlayer(sessionId, player.x, player.y);
-
+                console.log("add");
                 this.createMessageBox(sessionId,player);
             };
             
@@ -145,7 +144,6 @@ export default class Server extends Phaser.Scene
         if(this.mRoom.sessionId != sessionId){
             console.log('CREATED OTHER PLAYER' + sessionId + 'current ID' + this.mRoom.sessionId)
             this.otherPlayers[sessionId] = this.gameScene.add.faune(posX, posY, 'faune')
-            this.gameScene.physics.add.collider(this.otherPlayers[sessionId], this.wallslayer)
 
         }
     }

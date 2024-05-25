@@ -55,22 +55,19 @@ export default class Game extends Phaser.Scene
 		this.server.join() 
 		this.messageBoxTest = this.server.messageBox;
 
-
-		const map = this.make.tilemap({ key: 'dungeon' })
-		const tileset = map.addTilesetImage('dungeon', 'tiles', 16, 16, 1, 2)
-
-		const wallsLayer = map.createStaticLayer('Walls', tileset)
-
-		wallsLayer.setCollisionByProperty({ collides: true })
-
-		this.server.passGameScene(this,wallsLayer)
+		this.server.passGameScene(this)
 
 		this.scene.run('game-ui')
 
 		createCharacterAnims(this.anims)
 		createLizardAnims(this.anims)
 		createChestAnims(this.anims)
+		const map = this.make.tilemap({ key: 'dungeon' })
+		const tileset = map.addTilesetImage('dungeon', 'tiles', 16, 16, 1, 2)
 
+		const wallsLayer = map.createStaticLayer('Walls', tileset)
+
+		wallsLayer.setCollisionByProperty({ collides: true })
 		map.createStaticLayer('Ground', tileset)
 
 		this.knives = this.physics.add.group({
@@ -171,8 +168,9 @@ export default class Game extends Phaser.Scene
 			this.faune.update(this.cursors);
 			console.log("update" +this.server.sessionID);
 
-			if(this.server.sessionID){
-			this.updateMessageBoxPosition(this.server,this.server.sessionID);
+			if(this.messageBoxTest[this.server.sessionID]){
+				console.log("update")
+				this.updateMessageBoxPosition(this.server,this.server.sessionID);
 			}
 		}
 	}
