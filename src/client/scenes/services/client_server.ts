@@ -19,6 +19,9 @@ export default class Server extends Phaser.Scene
     private isChatting: boolean = false;
     public messageBox: { [key: string]: Phaser.GameObjects.Container } = {};
     public sessionID !: string ;
+    public movement: number = 0;
+    public otherPlayerList: string[] = [];
+
 
     preload() {
     }
@@ -50,6 +53,12 @@ export default class Server extends Phaser.Scene
             // Handle player state updates
             this.mRoom.state.players.onAdd = (player, sessionId) => {
                 this.addPlayer(sessionId, player.x, player.y);
+                if(sessionId != this.mRoom.sessionId)
+                    {
+                        this.otherPlayerList.push(sessionId);
+
+                    }
+                console.log(player.healthState)
                 console.log("add");
                 this.createMessageBox(sessionId,player);
             };
@@ -95,18 +104,81 @@ export default class Server extends Phaser.Scene
                 if (type === 'othermove') {
                     console.log('ENTERED HERE')
                     // Do something with the received data
-                    const { sessionId, x, y } = message;
+                    const { sessionId, x, y, currKey } = message;
+                    console.log("ck "+currKey)
                     console.log("Received othermove message from session ID " + sessionId + " with position x: " + x + ", y: " + y);
-                    
-                    // update the corresponding player's position 
-                    this.otherPlayers[sessionId].set_body_position(x, y)
-
-                    // if(this.otherPlayers[sessionId]){
-                    //     this.otherPlayers[sessionId].alt_update(1) // TODO: change this
+                    // const prevPosX = this.otherPlayers[sessionId].x
+                    // const prevPosY = this.otherPlayers[sessionId].y
+                    if (currKey === "ArrowUp") 
+                    {
+                        this.movement = 3;
+                    } 
+                    else if (currKey === "ArrowDown") 
+                    {
+                        this.movement = 4;
+                    } 
+                    else if (currKey === "ArrowLeft") 
+                    {
+                        this.movement = 1;
+                    }
+                        else if (currKey === "ArrowRight") 
+                    {
+                        this.movement = 2;
+                    } 
+                        // if(prevPosX != x){
+                    //     const dir = x - prevPosX;
+                    //     console.log("dirx" +dir)
+                    //     if(dir > 0){
+                    //         this.movement = 2;
+                    //     }
+                    //     else if(dir<0){
+                    //         this.movement = 1;
+                    //     }
+                    //     else{
+                    //         this.movement = 5;
+                    //     }
                     // }
+                    // if(prevPosY != y){
+                    //     const dir = y - prevPosY;
+                    //     console.log("dirx" +dir)
+
+                    //     if(dir > 0){
+                    //         this.movement = 4;
+                    //     }
+                    //     else if(dir < 0){
+                    //         this.movement = 3;
+                    //     }
+                    //     else{
+                    //         this.movement = 5
+                    //     }
+                    // }
+                    // update the corresponding player's position 
+                    //this.otherPlayers[sessionId].set_body_position(x, y)
+
+                    if(this.otherPlayers[sessionId]){
+                    this.otherPlayers[sessionId].alt_update(this.movement) // TODO: change this
+                     }
                 }
             });
               
+
+            this.mRoom.onMessage('keyup_event', (message) => {
+                console.log("keyup event from server")
+                const { sessionId, x, y } = message;
+                if(this.otherPlayers[sessionId]){
+                    this.movement = 5
+                    this.otherPlayers[sessionId].alt_update(this.movement) // TODO: change this
+                    console.log("clienteventup "+x,y)
+
+                    // this.otherPlayers[sessionId].body.x = x
+                    // this.otherPlayers[sessionId].body.y = y
+
+                    this.otherPlayers[sessionId].setPosition(x, y)
+                }
+
+            });
+              
+
               
             
             this.createChatInput();
@@ -120,14 +192,78 @@ export default class Server extends Phaser.Scene
                 const currentPlayer = this.mRoom.state.players[this.mRoom.sessionId];
                 // TODO : need to fix this 
                 if (currentPlayer) {
-                    // TODO : fix this 
+                    var currKey;
+                    // TODO : fix this
+                    if (key === "ArrowUp") 
+                    {
+                        currKey = "ArrowUp";
+                    } 
+                    else if (key === "ArrowDown") 
+                    {
+                        currKey = "ArrowDown";
+                    } 
+                    else if (key === "ArrowLeft") 
+                    {
+                        currKey = "ArrowLeft";
+                    }
+                     else if (key === "ArrowRight") 
+                    {
+                        currKey = "ArrowRight";
+                    } 
                     let x = this.playerentity.x
                     let y = this.playerentity.y
                     console.log('x ', x , 'y ', y)
-                    this.mRoom.send("move", { x , y });
+                    this.mRoom.send("move", { x , y , currKey} );
                 }
 
             });
+
+
+            // document.addEventListener("keydown", (event) => {
+            //     const key = event.key;
+            
+            //     // Get current player's position from the game state
+            //     const currentPlayer = this.mRoom.state.players[this.mRoom.sessionId];
+                
+            //     if (currentPlayer) {
+            //         let x = this.playerFaune.x;
+            //         let y = this.playerFaune.y;
+            
+            //         // Check which arrow key was pressed and update the position
+            //         if (key === "ArrowUp") {
+            //             y -= 1;
+            //         } else if (key === "ArrowDown") {
+            //             y += 1;
+            //         } else if (key === "ArrowLeft") {
+            //             x -= 1;
+            //         } else if (key === "ArrowRight") {
+            //             x += 1;
+            //         }
+            
+            //         console.log('x ', x, 'y ', y);
+            //         this.mRoom.send("move", { x, y });
+            //     }
+            // });
+            
+
+
+
+            document.addEventListener("keyup", (event) => {
+                const key = event.key;
+
+                // Get current player's position from the game state
+                //const currentPlayer = this.mRoom.state.players[this.mRoom.sessionId];
+                // TODO : need to fix this 
+               // if (currentPlayer) {
+                let x = this.playerFaune.x 
+                let y = this.playerFaune.y
+                console.log("stopmove " +x,y)
+                this.mRoom.send("stop_move",{x,y});
+        
+
+            });
+
+
             }).catch(e => {
             console.log("join error", e);
         });
