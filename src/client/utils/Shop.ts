@@ -142,12 +142,12 @@ class Shop {
                 //console.log(`${this.entity.playerName} bought ${item.name} for $${item.price}. Remaining coins: ${this.entity._coins}`);
                 // Display confirmation message
                 sceneEvents.emit('success-notification', `Purchased ${item.name}!`)
-                sceneEvents.emit('points-changed', this.entity._coins);
+                sceneEvents.emit('player-coins-changed', this.entity._coins);
             } else {
                 //console.log(`${this.entity.playerName} does not have enough coins to buy ${item.name}.`);
                 // Display insufficient funds message if needed
                 sceneEvents.emit('failure-notification', `Not enough coins!`)
-                sceneEvents.emit('points-changed', this.entity._coins);
+                sceneEvents.emit('player-coins-changed', this.entity._coins);
             }
         }
 

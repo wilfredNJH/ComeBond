@@ -294,7 +294,7 @@ export default class Server extends Phaser.Scene
         input.type = 'text';
         input.placeholder = 'Type your message...';
         input.style.position = 'absolute';
-        input.style.bottom = '10px';
+        input.style.bottom = '130px';
         input.style.left = '10px';
         input.style.display = 'none'; // Initially hidden
         document.body.appendChild(input);
