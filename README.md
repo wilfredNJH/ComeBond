@@ -40,9 +40,9 @@ Our project aims to create a virtual community that promotes volunteering and co
    ```sh
    npm run start
 
-License
+## License
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
-Acknowledgements
+## Acknowledgements
 Thanks to Hack Singapore 2024 for the inspiration and platform to develop this project.
 Special thanks to the open-source community for their invaluable tools and libraries.
