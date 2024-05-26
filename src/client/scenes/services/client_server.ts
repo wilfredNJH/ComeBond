@@ -302,7 +302,7 @@ export default class Server extends Phaser.Scene
     }
     createMessageBox(playerId: string, player: entity): Phaser.GameObjects.Container {
         console.log(playerId);
-        const boxWidth = 40;
+        const boxWidth = 60;
         const boxHeight = 30;
         const boxX = player.x;
         const boxY = player.y - player.height;
@@ -338,7 +338,7 @@ export default class Server extends Phaser.Scene
         if(this.mRoom.sessionId == playerID){
             const currPlayer = this.mRoom.state.players[playerID];
             console.log("a",currPlayer.x)
-            msgBox.setPosition(currPlayer.x, currPlayer.y - 10 - 20);
+            msgBox.setPosition(currPlayer.x, currPlayer.y  - 10 - 20);
 
         }
         else{
