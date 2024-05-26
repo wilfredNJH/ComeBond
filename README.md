@@ -25,7 +25,7 @@ Our project aims to create a virtual community that promotes volunteering and co
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/comebond.git
+   git clone https://github.com/wilfredNJH/comebond.git
    cd comebond
 
 2. Install dependencies:
