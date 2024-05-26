@@ -45,6 +45,7 @@ export default class Game extends Phaser.Scene
 	private bulletins!: Phaser.Physics.Arcade.StaticGroup
 
     private playerPoints: number = 0;
+	private bbmessageBox!: Phaser.GameObjects.Container; // Declare the message box property
 
 	private shop!: Shop;
 
@@ -173,8 +174,8 @@ export default class Game extends Phaser.Scene
 			  // Update UI or any other logic based on points
 		  });
 
-		  this.currentNewsTitle = this.add.text(200, 450, '', { fontFamily: 'Arial', fontSize: '25px', color: '#ffffff' })
-
+		  //this.currentNewsTitle = this.add.text(50, 50, '', { fontFamily: 'Arial', fontSize: '25px', color: '#ffffff' })
+		  this.bbmessageBox = this.createBBMessageBox();
 		  // news api 
 		  const url = `https://newsapi.org/v2/top-headlines?country=sg&apiKey=727064e1088a4b6db551396a175c6883`;
 		  try {
@@ -193,7 +194,9 @@ export default class Game extends Phaser.Scene
 					  console.log('Current Article Title:', articleTitles[currentIndex]);
 					  currentIndex = (currentIndex + 1) % articleTitles.length;
 					  setTimeout(displayArticle, 5000); // Rotate every 5 seconds, adjust timing as needed
-					  this.currentNewsTitle?.setText(`${articleTitles[currentIndex]}`)
+					  const textObject = this.bbmessageBox.getAt(1) as Phaser.GameObjects.Text; // Assuming the text object is the second element
+
+					  textObject?.setText(`${articleTitles[currentIndex]}`)
 				  };
 				  displayArticle();
 			  } else {
@@ -290,6 +293,37 @@ export default class Game extends Phaser.Scene
         } else {
             console.error('Geolocation is not supported by this browser.')
         }
+    }
+    private createBBMessageBox(): Phaser.GameObjects.Container {
+        const boxWidth = 680;
+        const boxHeight = 180;
+        const boxX = 350;
+        const boxY = -90;
+
+		const background = this.add.image(0, 0, 'discussion'); // 'backgroundKey' is the key of your loaded image
+		background.setDisplaySize(boxWidth, boxHeight); // Set the size to match the box dimensions
+		background.setOrigin(0.5, 0.5);
+	
+
+        // // Create a background for the message box
+        // const background = this.add.rectangle(0, 0, boxWidth, boxHeight, 0x000000, 0.5);
+        // background.setOrigin(0.5, 0.5);
+
+        // Create a text object for the message
+        const messageText = this.add.text(0, 0, '', {
+            fontSize: '25px',
+            color: '#ffffff',
+            align: 'center',
+            wordWrap: { width: boxWidth - 200, useAdvancedWrap: true }
+        });
+        messageText.setOrigin(0.5, 0.5);
+
+        // Create a container to hold the background and text
+        const messageBox = this.add.container(boxX, boxY, [background, messageText]);
+        messageBox.setVisible(true);
+
+        // Save the message box in the messageBox object
+        return messageBox;
     }
 
 	getStreetName(latitude: number, longitude: number) {
