@@ -30,8 +30,6 @@ export default class StartScreen extends Phaser.Scene {
         background.setScale(0.5,0.5)
 
         // Display instructions and input for player name
-        this.add.text(100, 100, 'Enter Your Name:', { fontFamily: 'Arial', fontSize: '24px', color: '#ffffff' })
-
         this.playerNameInput = this.add.dom(300, 130).createFromCache('nameForm')
 
         // Display sprite selection buttons using frames from atlases
