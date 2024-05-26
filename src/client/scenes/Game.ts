@@ -31,6 +31,8 @@ export default class Game extends Phaser.Scene
     public messageBoxTest: { [key: string]: Phaser.GameObjects.Container } = {};
 	public server!: Server;
 
+	private currentNewsTitle?: Phaser.GameObjects.Text
+
 	private playerName!: string
 	private selectedSpriteIndex!: number
 	private backgroundMusic?: Phaser.Sound.BaseSound
@@ -113,51 +115,6 @@ export default class Game extends Phaser.Scene
         this.entity = this.add.entity(128, 128, 'lizard')
       }
 
-		
-	//   const url = `https://newsapi.org/v2/top-headlines?country=sg&apiKey=727064e1088a4b6db551396a175c6883`;
-
-	//   fetch(url)
-	// 	  .then(response => response.json())
-	// 	  .then(data => {
-	// 		  if (data.articles && data.articles.length > 0) {
-	// 				console.log('found ariticles')
-	// 			  console.log(data.articles);
-	// 		  } else {
-	// 			  console.error('No articles found for the given API.');
-	// 		  }
-	// 	  })
-	// 	  .catch(error => {
-	// 		  console.error('Error fetching news:', error);
-	// 	  });
-
-		const url = `https://newsapi.org/v2/top-headlines?country=sg&apiKey=727064e1088a4b6db551396a175c6883`;
-		try {
-			const response = await fetch(url);
-			const data = await response.json();
-			if (data.articles && data.articles.length > 0) {
-				console.log('Found articles');
-				console.log(data.articles);
-
-				// Store the article titles
-				const articleTitles = data.articles.map((article: any) => article.title);
-
-				// Display the articles in a rotational manner
-				let currentIndex = 0;
-				const displayArticle = () => {
-					console.log('Current Article Title:', articleTitles[currentIndex]);
-					currentIndex = (currentIndex + 1) % articleTitles.length;
-					setTimeout(displayArticle, 5000); // Rotate every 5 seconds, adjust timing as needed
-				};
-				displayArticle();
-			} else {
-				console.error('No articles found for the given API.');
-			}
-		} catch (error) {
-			console.error('Error fetching news:', error);
-		}
-	  
-
-
 	  	this.shop = new Shop(this, this.entity);
 		this.entity.setKnives(this.knives)
 
@@ -216,6 +173,35 @@ export default class Game extends Phaser.Scene
 			  // Update UI or any other logic based on points
 		  });
 
+		  this.currentNewsTitle = this.add.text(200, 450, '', { fontFamily: 'Arial', fontSize: '25px', color: '#ffffff' })
+
+		  // news api 
+		  const url = `https://newsapi.org/v2/top-headlines?country=sg&apiKey=727064e1088a4b6db551396a175c6883`;
+		  try {
+			  const response = await fetch(url);
+			  const data = await response.json();
+			  if (data.articles && data.articles.length > 0) {
+				  console.log('Found articles');
+				  console.log(data.articles);
+  
+				  // Store the article titles
+				  const articleTitles = data.articles.map((article: any) => article.title);
+  
+				  // Display the articles in a rotational manner
+				  let currentIndex = 0;
+				  const displayArticle = () => {
+					  console.log('Current Article Title:', articleTitles[currentIndex]);
+					  currentIndex = (currentIndex + 1) % articleTitles.length;
+					  setTimeout(displayArticle, 5000); // Rotate every 5 seconds, adjust timing as needed
+					  this.currentNewsTitle?.setText(`${articleTitles[currentIndex]}`)
+				  };
+				  displayArticle();
+			  } else {
+				  console.error('No articles found for the given API.');
+			  }
+		  } catch (error) {
+			  console.error('Error fetching news:', error);
+		  }
 		
 	}
 
@@ -309,7 +295,7 @@ export default class Game extends Phaser.Scene
 	getStreetName(latitude: number, longitude: number) {
 		const apiKey = process.env.OPENCAGE_API_KEY
         const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`
-
+		
         fetch(url)
             .then(response => response.json())
             .then(data => {
