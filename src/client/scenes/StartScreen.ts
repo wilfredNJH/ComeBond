@@ -35,7 +35,7 @@ export default class StartScreen extends Phaser.Scene {
         // Display sprite selection buttons using frames from atlases
         this.spriteSelection = [
             this.add.image(200, 300, 'entity', 'walk-down-1.png').setInteractive().setDisplaySize(100, 100),
-            this.add.image(550, 300, 'lizard', 'idle-1.png').setInteractive().setDisplaySize(70, 125)
+            this.add.image(550, 300, 'entity', 'walk-down-1.png').setInteractive().setDisplaySize(100, 100).setTint(0x00ff00)  // Example tint color: green
         ]
 
         // Set up click/tap handlers for sprite selection
@@ -79,7 +79,7 @@ export default class StartScreen extends Phaser.Scene {
     }
 
 	getStreetName(latitude: number, longitude: number) {
-		const apiKey = process.env.OPENCAGE_API_KEY
+		const apiKey = 'b32ffbf8d92a4d59970adff3e275a519'
         const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`
 
         fetch(url)

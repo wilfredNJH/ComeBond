@@ -105,12 +105,12 @@ export default class Game extends Phaser.Scene
 
       if (this.selectedSpriteIndex == 0) {
         console.log("entity");
-        this.entity = this.add.entity(128, 128, 'entity')
+        this.entity = this.add.entity(128, 128, 'entity', false)
       }
       else {
         console.log("LIZARD");
 
-        this.entity = this.add.entity(128, 128, 'lizard')
+        this.entity = this.add.entity(128, 128, 'entity', true )
       }
 
 	  	this.shop = new Shop(this, this.entity);
