@@ -1,50 +1,48 @@
 # ComeBond
- Hack Singapore 2024 
+Hack Singapore 2024
+
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-Project Description:
+## Project Description
+
 Our project aims to create a virtual community that promotes volunteering and community engagement through a dynamic and interactive 2D client. This platform will enable users to navigate around a virtual space, interact with others in real-time, access updated news, and engage in various activities, all while being incentivized through a gamification system.
 
-## Prerequisites
+## Features
 
-You'll need [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) installed.
+- **Real-time Interaction:** Users can interact with others in the virtual space in real-time.
+- **Updated News:** Access the latest news within the platform.
+- **Engaging Activities:** Participate in various activities designed to encourage community engagement.
+- **Gamification:** Earn rewards and incentives through a gamification system to motivate participation.
 
-It is highly recommended to use [Node Version Manager](https://github.com/nvm-sh/nvm) (nvm) to install Node.js and npm.
+## Technologies Used
 
-For Windows users there is [Node Version Manager for Windows](https://github.com/coreybutler/nvm-windows).
+- **Phaser:** For creating the 2D game client.
+- **Colyseus:** For real-time multiplayer functionality.
+- **Node.js:** For the server-side logic.
+- **TypeScript:** For a type-safe development experience.
 
-Install Node.js and `npm` with `nvm`:
+## Installation
 
-```bash
-nvm install node
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/comebond.git
+   cd comebond
 
-nvm use node
-```
+2. Install dependencies:
+   ```sh
+   npm install
 
-Replace 'node' with 'latest' for `nvm-windows`.
+3. Run Server:
+   ```sh
+   npm run start-server
 
-## Getting Started
+4. Run Client:
+   ```sh
+   npm run start
 
-You can clone this repository or use [degit](https://github.com/Rich-Harris/degit) to scaffold the project like this:
+License
+This project is licensed under the MIT License. See the LICENSE file for more details.
 
-```bash
-npx degit https://github.com/ourcade/phaser3-vite-template my-folder-name
-cd my-folder-name
-
-npm install
-```
-
-Start development server:
-
-```
-npm run start-server
-```
-
-To create a production build:
-
-```
-npm run start
-
-## License
-
-[MIT License](https://github.com/ourcade/phaser3-vite-template/blob/master/LICENSE)
+Acknowledgements
+Thanks to Hack Singapore 2024 for the inspiration and platform to develop this project.
+Special thanks to the open-source community for their invaluable tools and libraries.
